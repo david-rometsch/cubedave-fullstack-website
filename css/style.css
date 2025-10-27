@@ -1,0 +1,28 @@
+a {
+    cursor: pointer;
+    display: inline-block;
+    margin: 20px;
+}
+h1 {
+    color: blue;
+}
+.container {
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px; /* Abstand unter Container schaffen */
+}
+
+.item {
+    flex: 1;
+    margin: 5px;
+    background-color: lightblue;
+    padding: 10px;
+    text-align: center;
+    flex-shrink: 0;
+}
+.options-section {
+    margin-top: 150px;
+}
