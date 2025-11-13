@@ -16,12 +16,20 @@ app = Flask(__name__)
 #    db.create_all()
 #start db
 # Cube.name hardcoded
-cube_name = 'gan air sm 356'
+cubes = [
+        {'name': 'icy cube', 'price': '8.95', 'img': 'icy_cube'}, 
+        {'name': 'mirror cube', 'price': '15.00', 'img': 'mirror_cube'}, 
+        {'name': 'void cube', 'price': '22.95', 'img': 'void_cube'}, 
+        
+]
 # ==== start routing ====#
 @app.route("/")
 def home_page():
     return render_template('index.html')
 
 @app.route("/shop.html")
-def shop(cube=cube_name):     # hardcoded example (later dynamic)
-    return render_template("shop.html",name = cube)
+def shop():     # hardcoded example (later dynamic)
+    return render_template("shop.html",cubes = cubes)
+
+# actualize
+#@app.route("shop.html/?cubes=1", method=[GET])  # 

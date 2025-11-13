@@ -15,6 +15,23 @@ h1 {
     margin-bottom: 40px; /* Abstand unter Container schaffen */
 }
 
+.container img {
+    max-width: 100%;
+    height: auto;
+    flex-shrink: 1;
+    /* Optional: flex-grow und flex-basis */
+    flex: 1 1 auto;
+    justify-content: center;
+    max-height: 50px;
+}
+
+img {
+    max-height: 100px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
 .item {
     flex: 1;
     margin: 5px;
