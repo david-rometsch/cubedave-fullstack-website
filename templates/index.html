@@ -1,16 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>CubeDave</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-</head>
-<body>
-<h1>CubeDave</h1>
-<p>This is a first try to create a website</p>
-<div class="container_img">
-<img class=container src="{{url_for('static', filename='images/cube.jpg')}}" alt="Cube image">
-</div>
-<h1><a href="shop.html">First thing you need to do is get a cube!</a></h1>
-</body>
+{% extends 'base.html' %}
+{%block header %}
+    <h1>CubeDave</h1>
+{% endblock %}
+
+{%block content %}
+    <p>
+        I am planing to create the following content: <br>
+        - Itroduction<br>
+        - Cubing Methods<br>
+        - Tutorial<br>
+        - Shop<br>
+        - ...<br>
+    </p>
+{% endblock %}
+

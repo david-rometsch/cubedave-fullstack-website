@@ -24,11 +24,11 @@ cubes = [
 ]
 # ==== start routing ====#
 @app.route("/")
-def home_page():
+def index_route():
     return render_template('index.html')
 
 @app.route("/shop.html")
-def shop():     # hardcoded example (later dynamic)
+def shop_route():     # hardcoded example (later dynamic)
     return render_template("shop.html",cubes = cubes)
 
 # actualize

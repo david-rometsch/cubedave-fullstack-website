@@ -1,0 +1,7 @@
+
+[
+    {'name': 'icy cube', 'price': '8.95', 'img': 'icy_cube'}, 
+    {'name': 'mirror cube', 'price': '15.00', 'img': 'mirror_cube'}, 
+    {'name': 'void cube', 'price': '22.95', 'img': 'void_cube'}, 
+
+]

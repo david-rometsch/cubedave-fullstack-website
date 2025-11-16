@@ -1,30 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>shop</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" />
-</head>
+{% extends 'base.html' %}
 
-<body>
-<h1>This are the newest cubes!</h1>
-<div class="container">
-    <div class="row">
-        {%for cube in cubes%}
-            <div class="col-md-4 item">
-                <img src="{{ url_for('static', filename='images/' ~ cube['img'] ~ '.jpg') }}" alt="{{cube['name']}}" class="img-fluid">
-                <p>{{cube['name']}}</p>
-                <p>{{cube['price']}}</p>
-            </div>
-        {%endfor%}
+{% block header %}
+    <h1>These are the newest cubes!</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            {%for cube in cubes%}
+                <div class="col-md-4 item">
+                    <img src="{{ url_for('static', filename='images/' ~ cube['img'] ~ '.jpg') }}" alt="{{cube['name']}}" class="img-fluid">
+                    <p>{{cube['name']}}</p>
+                    <p>{{cube['price']}}</p>
+                </div>
+            {%endfor%}
+        </div>
     </div>
-</div>
 
-<div class="options-section">
-    <h2>Options</h2>
-    <a href="index.html">&larr; go back to main page</a>
-</div>
-
-</body>
-</html>
+    <div class="options-section">
+        <a href="index.html">&larr; go back to main page</a>
+    </div>
+{% endblock %}
