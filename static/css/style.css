@@ -1,10 +1,18 @@
-/*
-Color pallette:
-black:  #000000
-red:    #ff0000
-ligthblue: #0A60FF
-background-light: #e1e1e6
-*/
+
+:root{
+    /*Color pallette:*/
+    --almosts-white: #eeeeee;
+    --black:  #000000; 
+    --red:     #ff0000;  
+    --lightblue:  #0A60FF; 
+    --background-light:  #bab7b7; 
+    --dark: #0f0f0f;
+    /*--hover: #cccccc;*/
+
+    /* Fonts */
+    --small: 12px;
+}
+
 
 /* ==== html-tags ==== */
 a {
@@ -15,14 +23,14 @@ a {
 }
 
 h1 {
-    color: #0A60FF;
+    color: var(--lightblue);
 }
 
 /* ==== NAVBAR ==== */
 /* Die Navbar soll die volle Breite einnehmen */
 nav.navbar {
     width: 100%;
-    background-color: #0A60FF; /* Dein definierter blauer Hintergrund */
+    background-color: var(--lightblue); /* Dein definierter blauer Hintergrund */
     padding: 0.5rem 1rem;
 }
 
@@ -49,7 +57,7 @@ li.navbar-left {
 
 li a {
     text-decoration: none;
-    color: white;
+    color: var(--almosts-white);
 }
 
 /* Bildgröße anpassen */
@@ -74,7 +82,7 @@ img.navbar-img {
 .item {
     flex: 1;
     margin: 5px;
-    background-color: #e1e1e6;
+    background-color: var(--dark);
     padding: 10px;
     text-align: center;
     flex-shrink: 0;
@@ -109,19 +117,41 @@ section.content {
 
 /* ==== FOOTER ==== */
 .page-footer {
-    background-color: black;
-    color: white;
+    background-color: var(--dark);
+    color: var(--almosts-white);
     padding: 50px;
     height: auto;
 }
 
 .page-footer a {
-    color: white;
+    color: var(--almosts-white);
     text-decoration: none;
+}
+/* ==== TABLE ==== */
+
+.table-spacing {
+    margin-top: 20px
+}
+
+.table-cells{
+    background-color: var(--dark);
+    border: 1px solid white;
+    border-collapse: collapse;
+    font-size: var(--small);*/
+}
+
+
+/* für alle elemente in der Tabelle */
+table, th, td{  
+    color: white
 }
 
 /* Optional: Links beim Hover leicht einfärben */
 .page-footer a:hover {
-    color: #cccccc;
+    color: var(--almosts-white);
     text-decoration: underline;
+}
+
+.container p {
+    color: var(--red)
 }

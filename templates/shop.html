@@ -10,8 +10,15 @@
             {%for cube in cubes%}
                 <div class="col-md-4 item">
                     <img src="{{ url_for('static', filename='images/' ~ cube['img'] ~ '.jpg') }}" alt="{{cube['name']}}" class="img-fluid">
-                    <p>{{cube['name']}}</p>
-                    <p>{{cube['price']}}</p>
+                    <table class="table-spacing">
+                        <tr>
+                            <td class="table-cells">name</td>
+                            <td class="table-cells">{{cube.name}}</td>
+                        </tr>
+                            <td class="table-cells">Preis</td>
+                            <td class="table-cells">{{cube.price}}</td>
+                        </tr>
+                    </table>
                 </div>
             {%endfor%}
         </div>
