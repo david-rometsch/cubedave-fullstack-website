@@ -3,8 +3,9 @@ from db import db
 
 class Cube (db.Model):
     id =  db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    price = db.Column(db.Float())
+      q
+
+     q q q q
     img = db.Column(db.String(100), nullable=False)     # will be an existing file path later!
 
     '''@classmethod
