@@ -1,0 +1,86 @@
+export const cubeData ={  
+  "cubes": 
+  [
+    {
+      id: 1,
+      name: "GAN 12 MagLev",
+      size: "3x3",
+      brand: "GAN",
+      magnetic: true,
+      category: "3x3"
+    },
+    {
+      id: 2,
+      name: "MoYu WeiLong WR M",
+      size: "3x3",
+      brand: "MoYu",
+      magnetic: true,
+      category: "3x3"
+    },
+    {
+      id: 3,
+      name: "Tornado V3 Flagship",
+      size: "3x3",
+      brand: "QiYi",
+      magnetic: true,
+      category: "3x3"
+    },
+    {
+      id: 4,
+      name: "RS3 M 2021",
+      size: "3x3",
+      brand: "MoYu",
+      magnetic: true,
+      category: "3x3"
+    },
+    {
+      id: 5,
+      name: "GAN 251 M Pro",
+      size: "2x2",
+      brand: "GAN",
+      magnetic: true,
+      category: "2x2"
+    },
+    {
+      id: 6,
+      name: "MoYu RS2 M Evolution",
+      size: "2x2",
+      brand: "MoYu",
+      magnetic: true,
+      category: "2x2"
+    },
+    {
+      id: 7,
+      name: "MoYu AoSu WR M",
+      size: "4x4",
+      brand: "MoYu",
+      magnetic: true,
+      category: "4x4"
+    },
+    {
+      id: 8,
+      name: "GAN 460 M",
+      size: "4x4",
+      brand: "GAN",
+      magnetic: true,
+      category: "4x4"
+    },
+    {
+      id: 9,
+      name: "QiYi MS 4x4",
+      size: "4x4",
+      brand: "QiYi",
+      magnetic: true,
+      category: "4x4"
+    },
+    {
+      id: 10,
+      name: "YJ MGC 4x4",
+      size: "4x4",
+      brand: "YJ",
+      magnetic: true,
+      category: "4x4"
+    }
+  ]
+};
+  
