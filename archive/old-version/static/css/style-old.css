@@ -1,0 +1,157 @@
+
+:root{
+    /*Color pallette:*/
+    --almosts-white: #eeeeee;
+    --black:  #000000; 
+    --red:     #ff0000;  
+    --lightblue:  #0A60FF; 
+    --background-light:  #bab7b7; 
+    --dark: #0f0f0f;
+    /*--hover: #cccccc;*/
+
+    /* Fonts */
+    --small: 12px;
+}
+
+
+/* ==== html-tags ==== */
+a {
+    cursor: pointer;
+    display: inline-block;
+    margin: 20px;
+    text-decoration: none;
+}
+
+h1 {
+    color: var(--lightblue);
+}
+
+/* ==== NAVBAR ==== */
+/* Die Navbar soll die volle Breite einnehmen */
+nav.navbar {
+    width: 100%;
+    background-color: var(--lightblue); /* Dein definierter blauer Hintergrund */
+    padding: 0.5rem 1rem;
+}
+
+/* Grundlegendes Styling für die ul */
+ul.navbar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;          /* nebeneinander */
+    align-items: center;    /* vertikal zentrieren */
+}
+
+/* Jedes li als flex-item */
+li.navbar-item {
+    margin-left: 1rem;      /* Abstand zwischen den Links */
+}
+
+/* Bild links und etwas Abstand nach rechts */
+li.navbar-left {
+    margin-left: 0;
+    margin-right: auto;     /* so schiebt es die anderen zu rechten Rand */
+}
+
+li a {
+    text-decoration: none;
+    color: var(--almosts-white);
+}
+
+/* Bildgröße anpassen */
+img.navbar-img {
+    height: 40px;           /* z.B. Höhe von 40px */
+    width: auto;
+    display: block;
+}
+
+/* ==== FLEXBOX ==== */
+/* flexbox container */
+.container {
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px; /* Abstand unter Container schaffen */
+}
+
+/* flexbox item */
+.item {
+    flex: 1;
+    margin: 5px;
+    background-color: var(--dark);
+    padding: 10px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.container img {
+    max-width: 100%;
+    height: auto;
+    flex-shrink: 1;
+    /* Optional: flex-grow und flex-basis */
+    flex: 1 1 auto;
+    justify-content: center;
+    max-height: 50px;
+}
+
+img {
+    max-height: 100px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+
+.options-section {
+    margin-top: 150px;
+}
+
+/* ==== CONTENT ==== */
+section.content {
+    min-height: 500px;
+}
+
+/* ==== FOOTER ==== */
+.page-footer {
+    background-color: var(--dark);
+    color: var(--almosts-white);
+    padding: 50px;
+    height: auto;
+}
+
+.page-footer a {
+    color: var(--almosts-white);
+    text-decoration: none;
+}
+/* ==== TABLE ==== */
+
+.table-spacing {
+    margin-top: 20px
+}
+
+.table-cells{
+    background-color: var(--dark);
+    border: 1px solid white;
+    border-collapse: collapse;
+    font-size: var(--small);*/
+}
+
+
+/* für alle elemente in der Tabelle */
+table, th, td{  
+    color: white
+}
+
+/* Optional: Links beim Hover leicht einfärben */
+.page-footer a:hover {
+    color: var(--almosts-white);
+    text-decoration: underline;
+}
+
+.container p {
+    color: var(--red)
+}

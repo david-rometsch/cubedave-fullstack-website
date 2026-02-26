@@ -1,5 +1,6 @@
 .idea/
 .venv/
+.envrc
 __pycache__/
 node_modules/
 package-lock.json
