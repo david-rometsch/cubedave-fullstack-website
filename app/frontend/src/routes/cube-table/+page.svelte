@@ -1,33 +1,36 @@
 <script>
-	import { cubeData } from './cubes.svelte.js';
-	let cubes = $state(cubeData.cubes); // gets tracked now
-	let cubeType = $state('');
-	// const filteredCubes = $derived(cubes.filter((cube) => cube.category == cubeType));
-	const filteredCubes = $derived((cubes ?? []).filter((cube) => cube.category == cubeType));
+	import { onMount } from 'svelte';
 
-	// fetch cubes from BE
-	async function getAllCubes() {
-		let responseJson = '';
-		try {
-			let response = await fetch('http://127.0.0.1:8000/api/all_cubes');
-			if (!response.ok) throw new Error(`HTTP Fehler! Status: ${response.status}`);
-			responseJson = await response.json();
-			cubes = responseJson;
-		} catch (err) {
-			// output.textContent = "Fehler: " + err.message
-			console.error('Fetch-Fehler:', err);
+	let product = $state([]); // gets tracked now
+	let productType = $state('');
+	const filteredproduct = $derived(product.filter((product) => product.category == productType));
+
+	// fetch product from BE
+	onMount(() => {
+		async function getAllproduct() {
+			let responseJson = '';
+			try {
+				let response = await fetch('http://127.0.0.1:8000/api/all_product');
+				if (!response.ok) throw new Error(`HTTP Fehler! Status: ${response.status}`);
+				responseJson = await response.json();
+				// console.log(`product: ${product}`);
+				console.log(`response json: ${responseJson}`);
+				product = responseJson;
+			} catch (err) {
+				// output.textContent = "Fehler: " + err.message
+				// console.error('Fetch-Fehler:', err);
+			}
 		}
-	}
-	getAllCubes();
+		getAllproduct();
+	});
 </script>
 
-<h1>Welcome to the Cubeshop!</h1>
-
+<h1 class="my-8 text-center text-3xl font-bold">Welcome to my cubing site!</h1>
 <div class="mt-4 flex gap-3">
 	<button
 		class="rounded bg-gray-800 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
 		onclick={() => {
-			cubeType = '3x3';
+			productType = '3x3';
 		}}
 	>
 		3x3
@@ -35,7 +38,7 @@
 	<button
 		class="rounded bg-gray-800 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
 		onclick={() => {
-			cubeType = '4x4';
+			productType = '4x4';
 		}}
 	>
 		4x4
@@ -43,7 +46,7 @@
 	<button
 		class="rounded bg-gray-800 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
 		onclick={() => {
-			cubeType = '2x2';
+			productType = '2x2';
 		}}
 	>
 		2x2
@@ -59,10 +62,10 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each filteredCubes as cube}
+		{#each filteredproduct as product}
 			<tr class="border-b border-gray-200 hover:bg-gray-100">
-				<td class="px-4 py-2">{cube.name}</td>
-				<td class="px-4 py-2">{cube.size}</td>
+				<td class="px-4 py-2">{product.name}</td>
+				<td class="px-4 py-2">{product.size}</td>
 			</tr>
 		{/each}
 	</tbody>

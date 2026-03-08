@@ -1,0 +1,34 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+app/__pycache__/
+app/database.db
+
+# Node
+app/frontend/node_modules/
+# app/frontend/build/   #NOTE: later build in dockerfile 
+
+# Environment
+.env
+.envrc
+
+# Sonstiges
+archive/
+documentation/
+
+
+app/frontend/node_modules # 
+app/__pycache__
+app/database.db
+app/__pycache__
+.git
+.venv
+*.pyc 
+.envrc
+.gitignore
+

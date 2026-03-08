@@ -1,99 +1,33 @@
-# main.py
 import json
 import os
 from contextlib import contextmanager
 
+import uvicorn
 # fastapi imports
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles  # included in fastapi.
-from fastapi.templating import Jinja2Templates
-
 # sqlalchemy imports
 from pydantic import BaseModel
-from sqlalchemy import Boolean, Column, String, create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
-
-# from typing import Optional
+from sqlalchemy import Boolean, Column, Integer, String, create_engine
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 app = FastAPI()
 
-# ==== load dependencies ====
-templates = Jinja2Templates(directory="templates")
-
-# ── CORS ────────────────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",  # z. B. React/Vite
-        "http://127.0.0.1:3000",
-        "http://localhost:5173",  # Vite default
-        "http://127.0.0.1:5173",
-        "http://localhost:*",  # wenn du verschiedene Ports testest
-        "*",  # ← oder einfach alles erlauben (nur dev!)
-    ],
-    allow_credentials=True,  # falls du später Cookies brauchst
-    allow_methods=["*"],  # GET, POST, PUT, DELETE, OPTIONS, ...
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ==== start db and orm ====#
-# avoid confilcts with pre-existing table
-if os.path.exists("instance/database.db"):
-    os.remove("instance/database.db")
-
+if os.path.exists("database.db"):
+    os.remove("database.db")  # avoid confilcts with pre-existing table
+    print("removed db...")
+    # exit()
 # create engine
 engine = create_engine("sqlite:///database.db")
-Base = declarative_base()
-
-
-# Product model
-class Product(Base):
-    __tablename__ = "product"
-    id = Column(String(100), primary_key=True)
-    name = Column(String(100))
-    size = Column(String(100))
-    brand = Column(String(100), nullable=False)
-    magnetic = Column(Boolean, nullable=False)
-    category = Column(String(100), nullable=False)
-    # added {'name': 'YJ MGC 4x4', 'size': '4x4', 'brand': 'YJ', 'magnetic': True, 'category': '4x4'}
-    # price = Column(Float())
-    # img = Column(String(100), nullable=False)  # will be an existing file path later!
-
-    """@classmethod
-    def create(cls, name, image):
-        return cls(name, image)"""
-
-    @classmethod
-    def read_all(cls, session) -> list[type]:
-        """Return list of all instances or []"""
-        return session.query(cls).all()
-
-    # def __repr__(self):
-    #     return f"id: {self.id}, name: {self.name} image-name: {self.img}"
-
-
-# sapledata:k
-# "name": "DAVID 12 MagLev",
-# "size": "3x3",
-# "brand": "GAN",
-# "magnetic": true,
-# "category": "3x3"
-
-
-# pydantic-interface
-class ProductSchema(BaseModel):
-    id: str
-    name: str
-    size: str
-    brand: str
-    magnetic: bool
-    category: str
-
-    class Config:
-        from_attributes = True  # only allows SQLAlchemy-Objekte
-
-
+print("created db...")
 # create Session-object
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -109,50 +43,95 @@ def get_session():
         session.close()
 
 
+def get_db():  # without contextmanager for post/Depends()
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class Product(Base):
+    __tablename__ = "product"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100))
+    size = Column(String(100))
+    brand = Column(String(100), nullable=False)
+    magnetic = Column(String, nullable=False)
+    category = Column(String(100), nullable=False)
+    description = Column(String(100), nullable=True)
+
+    @classmethod
+    def read_all(cls, session) -> list[type]:
+        """Return list of all instances or []"""
+        return session.query(cls).all()
+
+
+# pydantic-interface
+class ProductSchema(BaseModel):
+    # id: int
+    name: str
+    size: str
+    brand: str
+    magnetic: str
+    category: str
+    description: str
+
+    class Config:
+        from_attributes = True  # only allows SQLAlchemy-Objekte
+
+
 # create tables
 Base.metadata.create_all(engine)
 
+if True:  # seed demodata - set false later
 
-# load frum json
-def load_json_cubes():
-    with open("./static/cubes.json", "r", encoding="utf-8") as f:
-        dict_of_cubes = json.load(f)
-    # print("loc: ", dict_of_cubes)
-    return dict_of_cubes
+    def load_json_product():
+        with open("./static/product.json", "r", encoding="utf-8") as f:
+            dict_of_product = json.load(f)
+        # print("dict of product : ", dict_of_product)
+        return dict_of_product
 
-
-# seed cubes
-seed_cubes = load_json_cubes()
-with get_session() as session:
-    if session.query(Product).count() == 0:
-        for s_cube in seed_cubes["cubes"]:
-            cube = Product(**s_cube)
-            session.add(cube)
-            print("added", cube)
-
-
-# ==== routes ====
-# template
-# @app.get("/")
-# async def home(request: Request):
-#     return templates.TemplateResponse(
-#         "index.html",  # Name der Datei in templates/
-#         {
-#             "request": request,  # Muss immer übergeben werden!
-#             "title": "Meine coole Seite",
-#             "message": "Hello david from Template!",
-#         },
-#     )
-#
+    # seed product
+    seed_product = load_json_product()
+    with get_session() as session:
+        if session.query(Product).count() == 0:  # only if no products available.
+            for s_cube in seed_product["product"]:
+                cube = Product(**s_cube)
+                session.add(cube)
+                print("added", cube)
 
 
 # ==== API ====
-@app.get("/api/all_cubes", response_model=list[ProductSchema])
-async def load_cubes():
+@app.get("/api/all_product", response_model=list[ProductSchema])
+async def load_product():
     with get_session() as session:
         products = Product.read_all(session)
         return [ProductSchema.model_validate(p) for p in products]
 
 
+# add product to db (also for update)
+@app.post("/api/add_product")
+def add_product(
+    product: ProductSchema,
+    db: Session = Depends(get_db),  # pydantic creates model here.
+):
+    db_product = Product(**product.model_dump())  # model_dup from pydantic
+    db.add(db_product)
+    db.commit()
+    db.refresh(db_product)  # check if db entry succeeded
+    return db_product  # 200 if product added
+
+
+# =========================================#
+#       ENABLE FOR PRODUCTION ONLY         #
+# =========================================#
 # ==== static files ====# ganz am schluss nach allen routes !!!
-app.mount("/", StaticFiles(directory="frontend/build", html=True), name="static")
+# app.mount("/", StaticFiles(directory="frontend/build", html=True), name="static")
+
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=8000)  # production only!
