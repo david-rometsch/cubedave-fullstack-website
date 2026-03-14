@@ -3,10 +3,12 @@ import os
 from contextlib import contextmanager
 
 import uvicorn
+
 # fastapi imports
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles  # included in fastapi.
+
 # sqlalchemy imports
 from pydantic import BaseModel
 from sqlalchemy import Boolean, Column, Integer, String, create_engine
@@ -125,13 +127,3 @@ def add_product(
     db.commit()
     db.refresh(db_product)  # check if db entry succeeded
     return db_product  # 200 if product added
-
-
-# =========================================#
-#       ENABLE FOR PRODUCTION ONLY         #
-# =========================================#
-# ==== static files ====# ganz am schluss nach allen routes !!!
-# app.mount("/", StaticFiles(directory="frontend/build", html=True), name="static")
-
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="0.0.0.0", port=8000)  # production only!

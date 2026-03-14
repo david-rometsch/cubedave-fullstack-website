@@ -1,0 +1,8 @@
+node_modules
+.svelte-kit
+database.db
+.vscode
+e2e
+*.bak*
+README.md
+playwright.config.js

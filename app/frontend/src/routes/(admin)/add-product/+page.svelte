@@ -12,7 +12,7 @@
 		async function getAllproduct() {
 			let responseJson = '';
 			try {
-				let response = await fetch('http://127.0.0.1:8000/api/all_product');
+				let response = await fetch('/api/all_product');
 				if (!response.ok) throw new Error(`HTTP Fehler! Status: ${response.status}`);
 				responseJson = await response.json();
 				products = responseJson;
@@ -45,7 +45,7 @@
 			<div class="flex gap-1">
 				<label
 					for="name"
-					class="w- inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white"
+					class=" w- inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white"
 				>
 					{key}
 				</label>
@@ -60,7 +60,7 @@
 						placeholder=" "
 					/>
 					<label
-					  for={key}
+						for={key}
 						class="absolute top-2 left-3 text-sm text-gray-400 transition-all peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:bg-white peer-focus:px-1 peer-focus:text-xs"
 						>{placeholder[key]}
 					</label>
@@ -122,7 +122,7 @@
 			<button
 				class="ml-auto justify-end gap-4 rounded bg-gray-800 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
 				onclick={async () => {
-					const response = await fetch('http://127.0.0.1:8000/api/add_product', {
+					const response = await fetch('/api/add_product', {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify(newProduct)
@@ -132,16 +132,6 @@
 					console.log(newProduct);
 				}}>add</button
 			>
-		</div>
-		<div class="relative">
-			<input
-				class="peer w-72 rounded border-2 border-gray-900 px-4 py-2 outline-none"
-				placeholder=" "
-			/>
-			<label
-				class="absolute top-2 left-3 text-sm text-gray-400 transition-all peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:bg-white peer-focus:px-1 peer-focus:text-xs"
-				>test-label
-			</label>
 		</div>
 	</div>
 </div>

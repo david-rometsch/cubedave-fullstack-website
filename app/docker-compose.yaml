@@ -1,0 +1,13 @@
+services:
+  fastapi:
+    image: fastapi
+  nginx-svelte-local:
+    image: nginx-svelte-local
+    ports:
+      - "80:80"       # ← neu: für HTTP redirect
+      - "443:443"
+    environment:
+    - CERTBOT_EMAIL=david.rometsch@edu.teko.ch
+    volumes:          # ← Tippfehler: volume → volumes
+      - ./certs:/etc/nginx/certs:ro  # ← mkcert statt certbot
+      

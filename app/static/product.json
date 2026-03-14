@@ -1,82 +1,82 @@
 {
   "product": [
     {
-      "name": "David ist der beste",
-      "size": "3x3",
+      "name": "GAN 12 Maglev UV",
+      "size": "59mm",
       "brand": "GAN",
-      "magnetic": true,
+      "magnetic": "yes",
       "category": "3x3",
       "description": ""
     },
     {
       "name": "MoYu WeiLong WR M",
-      "size": "3x3",
+      "size": "56mm",
       "brand": "MoYu",
-      "magnetic": true,
+      "magnetic": "yes",
       "category": "3x3",
       "description": ""
     },
     {
       "name": "Tornado V3 Flagship",
-      "size": "3x3",
+      "size": "56mm",
       "brand": "QiYi",
-      "magnetic": true,
+      "magnetic": "yes",
       "category": "3x3",
       "description": ""
     },
     {
       "name": "RS3 M 2021",
-      "size": "3x3",
+      "size": "56mm",
       "brand": "MoYu",
-      "magnetic": true,
+      "magnetic": "yes",
       "category": "3x3",
       "description": ""
     },
     {
       "name": "GAN 251 M Pro",
-      "size": "2x2",
+      "size": "50mm",
       "brand": "GAN",
-      "magnetic": true,
+      "magnetic": "yes",
       "category": "2x2",
       "description": ""
     },
     {
       "name": "MoYu RS2 M Evolution",
-      "size": "2x2",
+      "size": "50mm",
       "brand": "MoYu",
-      "magnetic": true,
+      "magnetic": "yes",
       "category": "2x2",
       "description": ""
     },
     {
       "name": "MoYu AoSu WR M",
-      "size": "4x4",
+      "size": "60mm",
       "brand": "MoYu",
-      "magnetic": true,
+      "magnetic": "yes",
       "category": "4x4",
       "description": ""
     },
     {
       "name": "GAN 460 M",
-      "size": "4x4",
+      "size": "60mm",
       "brand": "GAN",
-      "magnetic": true,
+      "magnetic": "yes",
       "category": "4x4",
       "description": ""
     },
     {
       "name": "QiYi MS 4x4",
-      "size": "4x4",
+      "size": "60mm",
       "brand": "QiYi",
-      "magnetic": true,
+      "magnetic": "yes",
       "category": "4x4",
       "description": ""
     },
     {
       "name": "YJ MGC 4x4",
-      "size": "4x4",
+      "size": "60mm",
       "brand": "YJ",
-      "magnetic": true,
+      "magnetic": "yes",
       "category": "4x4",
       "description": ""
     }
