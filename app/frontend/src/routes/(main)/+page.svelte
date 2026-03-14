@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 	import { cart, addToCart } from '$lib/cart.svelte.js';
 
 	let quantities = $state({});
@@ -94,7 +95,7 @@
 	</thead>
 	<tbody>
 		{#each filteredproduct as product}
-			<tr class="border-b border-gray-200 hover:bg-gray-100">
+			<tr class="cursor-pointer border-b border-gray-200 hover:bg-gray-100" onclick={() => goto(`/product/${product.id}`)}>
 				<td class="px-4 py-2">
 					{#if product.image}
 						<img src={product.image} alt={product.name} style="width:57px;height:57px;object-fit:contain;" />
