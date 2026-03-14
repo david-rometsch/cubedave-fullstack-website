@@ -43,6 +43,7 @@
 		brand: 'str',
 		info: 'str',
 		category: 'str',
+		price: 'float',
 		image: 'str',
 		description: 'str'
 	};

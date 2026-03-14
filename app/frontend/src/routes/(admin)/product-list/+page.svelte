@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 	// import { getAllproduct } from '$lib/api.js';
 
 	let products = $state([]); // gets tracked now
@@ -62,6 +63,7 @@
 			<th class="px-4 py-2 text-left">Size</th>
 			<th class="px-4 py-2 text-left">Info</th>
 			<th class="px-4 py-2 text-left">Category</th>
+			<th class="px-4 py-2 text-left">Price</th>
 			<th class="px-4 py-2 text-left">Action</th>
 		</tr>
 	</thead>
@@ -79,16 +81,26 @@
 				<td class="px-4 py-2">{p.size}</td>
 				<td class="px-4 py-2">{p.info}</td>
 				<td class="px-4 py-2">{p.category}</td>
+				<td class="px-4 py-2">{p.price ?? '—'}</td>
 				<td class="px-4 py-2">
-					<button
-						class="rounded bg-gray-800 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
-						onclick={() => {
-    					console.log(`product/id given from product-list: ${p} / ${p.id}`);
-    					goto(`/update-product/?id=${p.id}`);
-						}}
-					>
-						update
-					</button>
+					<div class="flex gap-2">
+						<button
+							class="w-20 rounded bg-gray-800 px-2 py-1 text-sm text-white transition hover:bg-yellow-400 hover:text-gray-900"
+							onclick={() => goto(`/update-product/?id=${p.id}`)}
+						>update</button>
+						<button
+							class="w-20 rounded bg-red-700 px-2 py-1 text-sm text-white transition hover:bg-yellow-400 hover:text-gray-900"
+							onclick={async () => {
+								const res = await fetch(`/api/delete_product/${p.id}`, { method: 'DELETE' });
+								if (res.ok) {
+									products = products.filter((x) => x.id !== p.id);
+									toast.success('Product deleted!');
+								} else {
+									toast.error('Error!');
+								}
+							}}
+						>delete</button>
+					</div>
 				</td>
 				<!-- <td><button>change</button></td> -->
 			</tr>

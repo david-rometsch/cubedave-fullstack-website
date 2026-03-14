@@ -1,7 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
-	import { cart, clearCart } from '$lib/cart.svelte.js'; // needed for transient order items on multiple pages
+	import { cart, addToCart } from '$lib/cart.svelte.js';
 
+	let quantities = $state({});
 	let product = $state([]); // gets tracked now
 	let productType = $state('');
 	const known = ['3x3', '4x4', '2x2'];
@@ -86,6 +87,9 @@
 			<th class="px-4 py-2 text-left">Size</th>
 			<th class="px-4 py-2 text-left">Info</th>
 			<th class="px-4 py-2 text-left">Category</th>
+			<th class="px-4 py-2 text-left">Price</th>
+			<th class="px-4 py-2 text-left">Qty</th>
+			<th class="px-4 py-2 text-left"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -102,6 +106,23 @@
 				<td class="px-4 py-2">{product.size}</td>
 				<td class="px-4 py-2">{product.info}</td>
 				<td class="px-4 py-2">{product.category}</td>
+				<td class="px-4 py-2">{product.price != null ? `sFr. ${product.price.toFixed(2)}` : '—'}</td>
+				<td class="px-4 py-2">
+					<select
+						class="w-14 rounded border border-gray-300 py-1 pl-2 pr-6"
+						bind:value={quantities[product.id]}
+					>
+						{#each [1,2,3,4,5,6,7,8,9,10] as n}
+							<option value={n}>{n}</option>
+						{/each}
+					</select>
+				</td>
+				<td class="px-4 py-2">
+					<button
+						class="rounded bg-gray-800 px-3 py-1 text-sm text-white transition hover:bg-yellow-400 hover:text-gray-900"
+						onclick={() => addToCart(product, quantities[product.id] ?? 1)}
+					>add</button>
+				</td>
 			</tr>
 		{/each}
 	</tbody>

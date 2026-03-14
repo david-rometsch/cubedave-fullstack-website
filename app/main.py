@@ -9,10 +9,11 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles  # included in fastapi.
 
-# sqlalchemy imports
 from pydantic import BaseModel
-from sqlalchemy import Boolean, Column, Integer, String, Text, create_engine
-from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+
+from models import Base, Order, OrderSchema, Product, ProductCreateSchema, ProductOrder, ProductSchema
 
 app = FastAPI()
 
@@ -51,45 +52,6 @@ def get_db():  # without contextmanager for post/Depends()
         yield db
     finally:
         db.close()
-
-
-class Base(DeclarativeBase):
-    pass
-
-
-class Product(Base):
-    __tablename__ = "product"
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100))
-    size = Column(String(100))
-    brand = Column(String(100), nullable=False)
-    info = Column(String, nullable=True)
-    category = Column(String(100), nullable=False)
-    description = Column(String(100), nullable=True)
-    image = Column(Text, nullable=True)
-
-    @classmethod
-    def read_all(cls, session) -> list[type]:
-        """Return list of all instances or []"""
-        return session.query(cls).all()
-
-
-# pydantic-interface
-class ProductCreateSchema(BaseModel):
-    name: str
-    size: str
-    brand: str
-    info: str | None = None
-    category: str
-    description: str
-    image: str | None = None
-
-
-class ProductSchema(ProductCreateSchema):
-    id: int
-
-    class Config:
-        from_attributes = True  # only allows SQLAlchemy-Objekte
 
 
 # create tables
@@ -149,6 +111,63 @@ def save_data():
     with open("./static/product.json", "w", encoding="utf-8") as f:
         json.dump({"product": data}, f, ensure_ascii=False, indent=2)
     return {"status": "saved"}
+
+
+# delete product by id
+@app.delete("/api/delete_product/{product_id}")
+def delete_product(product_id: int, db: Session = Depends(get_db)):
+    db_product = db.get(Product, product_id)
+    db.delete(db_product)
+    db.commit()
+    return {"status": "deleted"}
+
+
+# create order from cart
+class OrderRequest(BaseModel):
+    customer_name: str
+    items: list[dict]  # [{product_id, quantity}]
+
+@app.post("/api/order")
+def create_order(order_req: OrderRequest, db: Session = Depends(get_db)):
+    order = Order(customer_name=order_req.customer_name)
+    db.add(order)
+    db.flush()  # get order.id before commit
+    for item in order_req.items:
+        po = ProductOrder(order_id=order.id, product_id=item["product_id"], quantity=item["quantity"])
+        db.add(po)
+    db.commit()
+    db.refresh(order)
+    return {"status": "ordered", "order_id": order.id}
+
+
+# get all orders with total
+@app.get("/api/orders")
+def get_orders(db: Session = Depends(get_db)):
+    orders = db.query(Order).all()
+    result = []
+    for o in orders:
+        total = sum(
+            (po.product.price or 0) * po.quantity for po in o.product_associations
+        )
+        result.append({"id": o.id, "customer_name": o.customer_name, "total": round(total, 2)})
+    return result
+
+
+# get single order detail
+@app.get("/api/order/{order_id}")
+def get_order(order_id: int, db: Session = Depends(get_db)):
+    o = db.get(Order, order_id)
+    items = [
+        {
+            "product_name": po.product.name,
+            "price": po.product.price,
+            "quantity": po.quantity,
+            "subtotal": round((po.product.price or 0) * po.quantity, 2),
+        }
+        for po in o.product_associations
+    ]
+    total = round(sum(i["subtotal"] for i in items), 2)
+    return {"id": o.id, "customer_name": o.customer_name, "total": total, "items": items}
 
 
 # put to update product (one or multiple fields at once)

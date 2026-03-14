@@ -9,19 +9,18 @@
 
 <nav class="bg-gray-300 px-6 py-3">
 	<ul class="flex items-center gap-6">
-		<li class="cursor-pointer text-white hover:text-yellow-400">
-			<a href="/">Home</a>
+		<li>
+			<a href="/" class="rounded bg-gray-900 px-4 py-2 text-white hover:text-yellow-400">Shop</a>
 		</li>
 
-		<li class="cursor-pointer text-white hover:text-yellow-400">
+		<li class="ml-auto cursor-pointer text-gray-800 hover:text-yellow-400">
 			<a href="/orders/">Orders</a>
 		</li>
-
-		<li class="cursor-pointer text-white hover:text-yellow-400">
-			<a href="/add-product/">Add Product</a>
+		<li class="cursor-pointer text-gray-800 hover:text-yellow-400">
+			<a href="/product-list/">Product List</a>
 		</li>
-		<li class="cursor-pointer text-white hover:text-yellow-400">
-			<a href="/update-product/">Update Product</a>
+		<li class="cursor-pointer text-gray-800 hover:text-yellow-400">
+			<a href="/add-product/">Add Product</a>
 		</li>
 	</ul>
 </nav>
@@ -33,14 +32,14 @@
 	<ul class="flex items-center gap-6">
 		<li>
 			<button
-				class="cursor-pointer text-white hover:text-yellow-400"
+				class="cursor-pointer text-gray-800 hover:text-yellow-400"
 				onclick={async () => {
 					const res = await fetch('/api/save_data', { method: 'POST' });
 					if (res.ok) toast.success('Daten gespeichert');
 					else toast.error('Fehler beim Speichern');
 				}}
 			>
-				Save Data
+				Save Demo Data
 			</button>
 		</li>
 	</ul>

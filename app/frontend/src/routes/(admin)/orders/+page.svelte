@@ -1,75 +1,38 @@
 <script>
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
-	let product = $state([]); // gets tracked now
-	let productType = $state('');
-	const filteredproduct = $derived(product.filter((product) => product.category == productType));
+	let orders = $state([]);
 
-	// fetch product from BE
-	onMount(() => {
-		async function getAllproduct() {
-			let responseJson = '';
-			try {
-				let response = await fetch('/api/all_product');
-				if (!response.ok) throw new Error(`HTTP Fehler! Status: ${response.status}`);
-				responseJson = await response.json();
-				// console.log(`product: ${product}`);
-				console.log(`response json: ${responseJson}`);
-				product = responseJson;
-			} catch (err) {
-				// output.textContent = "Fehler: " + err.message
-				// console.error('Fetch-Fehler:', err);
-			}
-		}
-		getAllproduct();
+	onMount(async () => {
+		const res = await fetch('/api/orders');
+		if (res.ok) orders = await res.json();
 	});
 </script>
 
 <h1 class="my-8 text-center text-3xl font-bold">All Orders</h1>
-<div class="mt-4 flex gap-3">
-	<button
-		class="rounded bg-gray-500 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
-		onclick={() => {
-			productType = '3x3';
-		}}
-	>
-		3x3
-	</button>
-	<button
-		class="rounded bg-gray-500 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
-		onclick={() => {
-			productType = '4x4';
-		}}
-	>
-		4x4
-	</button>
-	<button
-		class="rounded bg-gray-500 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
-		onclick={() => {
-			productType = '2x2';
-		}}
-	>
-		2x2
-	</button>
-</div>
 
-<!-- Tabelle -->
 <table class="mt-6 w-full border-collapse">
 	<thead class="bg-gray-500 text-white">
 		<tr>
-			<th class="px-4 py-2 text-left">Name</th>
-			<th class="px-4 py-2 text-left">Size</th>
-			<th class="px-4 py-2 text-left">Magnetic</th>
-			<th class="px-4 py-2 text-left">Category</th>
+			<th class="px-4 py-2 text-left">#</th>
+			<th class="px-4 py-2 text-left">Customer</th>
+			<th class="px-4 py-2 text-left">Total</th>
+			<th class="px-4 py-2 text-left"></th>
 		</tr>
 	</thead>
 	<tbody>
-		{#each filteredproduct as product}
+		{#each orders as o}
 			<tr class="border-b border-gray-200 hover:bg-gray-100">
-				<td class="px-4 py-2">{product.name}</td>
-				<td class="px-4 py-2">{product.size}</td>
-				<td class="px-4 py-2">{product.magnetic}</td>
-				<td class="px-4 py-2">{product.category}</td>
+				<td class="px-4 py-2">{o.id}</td>
+				<td class="px-4 py-2">{o.customer_name}</td>
+				<td class="px-4 py-2">sFr. {o.total.toFixed(2)}</td>
+				<td class="px-4 py-2">
+					<button
+						class="rounded bg-gray-800 px-3 py-1 text-sm text-white transition hover:bg-yellow-400 hover:text-gray-900"
+						onclick={() => goto(`/orders/${o.id}`)}
+					>detail</button>
+				</td>
 			</tr>
 		{/each}
 	</tbody>

@@ -55,11 +55,13 @@
 		brand: 'str',
 		info: 'str',
 		category: 'str',
+		price: 'float',
 		image: 'str',
 		description: 'str'
 	};
 </script>
 
+<a href="/product-list/" class="mt-4 inline-block px-6 text-gray-500 hover:text-gray-900">← Product List</a>
 <h1 class="my-8 text-center text-3xl font-bold">Update Product with id: {product?.id}</h1>
 <div class="mt-8 flex justify-center">
 	<div class="flex flex-col gap-4">
