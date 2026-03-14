@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles  # included in fastapi.
 
 # sqlalchemy imports
 from pydantic import BaseModel
-from sqlalchemy import Boolean, Column, Integer, String, create_engine
+from sqlalchemy import Boolean, Column, Integer, String, Text, create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 app = FastAPI()
@@ -63,9 +63,10 @@ class Product(Base):
     name = Column(String(100))
     size = Column(String(100))
     brand = Column(String(100), nullable=False)
-    magnetic = Column(String, nullable=False)
+    info = Column(String, nullable=True)
     category = Column(String(100), nullable=False)
     description = Column(String(100), nullable=True)
+    image = Column(Text, nullable=True)
 
     @classmethod
     def read_all(cls, session) -> list[type]:
@@ -74,14 +75,18 @@ class Product(Base):
 
 
 # pydantic-interface
-class ProductSchema(BaseModel):
-    # id: int
+class ProductCreateSchema(BaseModel):
     name: str
     size: str
     brand: str
-    magnetic: str
+    info: str | None = None
     category: str
     description: str
+    image: str | None = None
+
+
+class ProductSchema(ProductCreateSchema):
+    id: int
 
     class Config:
         from_attributes = True  # only allows SQLAlchemy-Objekte
@@ -102,10 +107,10 @@ if True:  # seed demodata - set false later
     seed_product = load_json_product()
     with get_session() as session:
         if session.query(Product).count() == 0:  # only if no products available.
-            for s_cube in seed_product["product"]:
-                cube = Product(**s_cube)
-                session.add(cube)
-                print("added", cube)
+            for s_product in seed_product["product"]:
+                product = Product(**s_product)
+                session.add(product)
+                print("added", product)
 
 
 # ==== API ====
@@ -119,11 +124,41 @@ async def load_product():
 # add product to db (also for update)
 @app.post("/api/add_product")
 def add_product(
-    product: ProductSchema,
-    db: Session = Depends(get_db),  # pydantic creates model here.
+    product: ProductCreateSchema,
+    db: Session = Depends(get_db),
 ):
     db_product = Product(**product.model_dump())  # model_dup from pydantic
     db.add(db_product)
     db.commit()
     db.refresh(db_product)  # check if db entry succeeded
     return db_product  # 200 if product added
+
+
+# save current db state to product.json (overwrites seed data)
+@app.post("/api/save_data")
+def save_data():
+    with get_session() as session:
+        products = Product.read_all(session)
+        data = []
+        for p in products:
+            d = ProductSchema.model_validate(p).model_dump(exclude={'id'})
+            # move image to end
+            image = d.pop('image', None)
+            d['image'] = image
+            data.append(d)
+    with open("./static/product.json", "w", encoding="utf-8") as f:
+        json.dump({"product": data}, f, ensure_ascii=False, indent=2)
+    return {"status": "saved"}
+
+
+# put to update product (one or multiple fields at once)
+@app.put("/api/update_product/{product_id}")
+def update_product(
+    product_id: int, product: ProductSchema, db: Session = Depends(get_db)
+):
+    db_product = db.get(Product, product_id)
+    for key, value in product.model_dump(exclude={'id'}).items():
+        setattr(db_product, key, value)
+    db.commit()
+    db.refresh(db_product)
+    return db_product

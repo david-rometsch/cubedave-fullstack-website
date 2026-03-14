@@ -4,9 +4,20 @@
 	import { marked } from 'marked';
 
 	let products = [];
-	let fields = [];
 	let newProduct = {};
-	let image = '';
+	let imagePreview = '';
+
+	function handleDrop(e) {
+		e.preventDefault();
+		const file = e.dataTransfer.files[0];
+		if (!file) return;
+		const reader = new FileReader();
+		reader.onload = () => {
+			imagePreview = reader.result;
+			newProduct.image = reader.result;
+		};
+		reader.readAsDataURL(file);
+	}
 	// fetch product-fields dynamically
 	onMount(() => {
 		async function getAllproduct() {
@@ -30,7 +41,7 @@
 		name: 'str',
 		size: 'str',
 		brand: 'str',
-		magnetic: 'str',
+		info: 'str',
 		category: 'str',
 		image: 'str',
 		description: 'str'
@@ -41,7 +52,7 @@
 <div class="mt-8 flex justify-center">
 	<div class="flex flex-col gap-4">
 		<!-- rows -->
-		{#each Object.keys(products[0] ?? {}).filter((k) => k !== 'description') as key}
+		{#each Object.keys(products[0] ?? {}).filter((k) => k !== 'description' && k !== 'id' && k !== 'image') as key}
 			<div class="flex gap-1">
 				<label
 					for="name"
@@ -67,26 +78,22 @@
 				</div>
 			</div>
 		{/each}
-		<!-- different for image -->
-		<div>
-			<label
-				for="name"
-				class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white"
-			>
+		<!-- image drag & drop -->
+		<div class="flex gap-1">
+			<label class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white">
 				image
 			</label>
-			<input
-				autocomplete="off"
-				type="text"
-				id="name"
-				name="name"
-				required
-				minlength="4"
-				maxlength="8"
-				size="10"
-				bind:value={image}
-				class="w-72 rounded border-2 border-gray-900 px-4 py-2 outline-none"
-			/>
+			<div
+				class="flex w-72 items-center justify-center rounded border-2 border-dashed border-gray-400 px-4 py-4 text-sm text-gray-400 transition hover:border-gray-700"
+				ondrop={handleDrop}
+				ondragover={(e) => e.preventDefault()}
+			>
+				{#if imagePreview}
+					<img src={imagePreview} alt="preview" class="max-h-24 object-contain" />
+				{:else}
+					Bild hier ablegen
+				{/if}
+			</div>
 		</div>
 		<!-- long description-text in bigger box -->
 		<div class="gap- flex items-start gap-1">

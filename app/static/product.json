@@ -4,7 +4,7 @@
       "name": "GAN 12 Maglev UV",
       "size": "59mm",
       "brand": "GAN",
-      "magnetic": "yes",
+      "info": "magnetic",
       "category": "3x3",
       "description": ""
     },
@@ -12,7 +12,7 @@
       "name": "MoYu WeiLong WR M",
       "size": "56mm",
       "brand": "MoYu",
-      "magnetic": "yes",
+      "info": "magnetic",
       "category": "3x3",
       "description": ""
     },
@@ -20,7 +20,7 @@
       "name": "Tornado V3 Flagship",
       "size": "56mm",
       "brand": "QiYi",
-      "magnetic": "yes",
+      "info": "magnetic",
       "category": "3x3",
       "description": ""
     },
@@ -28,7 +28,7 @@
       "name": "RS3 M 2021",
       "size": "56mm",
       "brand": "MoYu",
-      "magnetic": "yes",
+      "info": "magnetic",
       "category": "3x3",
       "description": ""
     },
@@ -36,7 +36,7 @@
       "name": "GAN 251 M Pro",
       "size": "50mm",
       "brand": "GAN",
-      "magnetic": "yes",
+      "info": "magnetic",
       "category": "2x2",
       "description": ""
     },
@@ -44,7 +44,7 @@
       "name": "MoYu RS2 M Evolution",
       "size": "50mm",
       "brand": "MoYu",
-      "magnetic": "yes",
+      "info": "magnetic",
       "category": "2x2",
       "description": ""
     },
@@ -52,7 +52,7 @@
       "name": "MoYu AoSu WR M",
       "size": "60mm",
       "brand": "MoYu",
-      "magnetic": "yes",
+      "info": "magnetic",
       "category": "4x4",
       "description": ""
     },
@@ -60,7 +60,7 @@
       "name": "GAN 460 M",
       "size": "60mm",
       "brand": "GAN",
-      "magnetic": "yes",
+      "info": "magnetic",
       "category": "4x4",
       "description": ""
     },
@@ -68,7 +68,7 @@
       "name": "QiYi MS 4x4",
       "size": "60mm",
       "brand": "QiYi",
-      "magnetic": "yes",
+      "info": "magnetic",
       "category": "4x4",
       "description": ""
     },
@@ -76,7 +76,7 @@
       "name": "YJ MGC 4x4",
       "size": "60mm",
       "brand": "YJ",
-      "magnetic": "yes",
+      "info": "magnetic",
       "category": "4x4",
       "description": ""
     }

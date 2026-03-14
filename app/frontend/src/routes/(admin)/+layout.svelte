@@ -1,6 +1,6 @@
 <script>
 	import '../layout.css';
-	import { Toaster } from 'svelte-sonner';
+	import { Toaster, toast } from 'svelte-sonner';
 	// usage: {@html marked(product.description)}
 	let { children } = $props();
 </script>
@@ -20,6 +20,9 @@
 		<li class="cursor-pointer text-white hover:text-yellow-400">
 			<a href="/add-product/">Add Product</a>
 		</li>
+		<li class="cursor-pointer text-white hover:text-yellow-400">
+			<a href="/update-product/">Update Product</a>
+		</li>
 	</ul>
 </nav>
 
@@ -27,5 +30,18 @@
 
 <!-- footer -->
 <div class="bg-gray-300 px-6 py-3">
-	<ul class="flex items-center gap-6"></ul>
+	<ul class="flex items-center gap-6">
+		<li>
+			<button
+				class="cursor-pointer text-white hover:text-yellow-400"
+				onclick={async () => {
+					const res = await fetch('/api/save_data', { method: 'POST' });
+					if (res.ok) toast.success('Daten gespeichert');
+					else toast.error('Fehler beim Speichern');
+				}}
+			>
+				Save Data
+			</button>
+		</li>
+	</ul>
 </div>
