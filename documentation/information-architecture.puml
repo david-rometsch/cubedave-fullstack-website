@@ -1,0 +1,37 @@
+@startuml information-architecture
+skinparam componentFontSize 13
+skinparam packageFontSize 14
+skinparam backgroundColor white
+skinparam ArrowColor #555555
+skinparam PackageBorderColor #888888
+
+title Informationsarchitektur – Frontend Routes
+
+package "/ (Root)" {
+  component [layout.css] as css
+}
+
+package "(main) Layout" {
+  component [Home\n/] as home
+  component [Product Detail\n/product/{id}] as productDetail
+  component [Shopping Cart\n/shopping-cart] as cart
+}
+
+package "(admin) Layout" {
+  component [Add Product\n/add-product] as addProduct
+  component [Product List\n/product-list] as productList
+  component [Update Product\n/update-product] as updateProduct
+  component [Orders\n/orders] as orders
+  component [Order Detail\n/orders/{id}] as orderDetail
+}
+
+home --> productDetail : navigate
+home --> cart : navigate
+productDetail --> cart : add to cart
+
+orders --> orderDetail : navigate
+
+productList --> updateProduct : edit product
+productList --> addProduct : add new
+
+@enduml

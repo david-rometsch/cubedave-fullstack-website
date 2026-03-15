@@ -41,4 +41,4 @@ pytest test_main.py -v
 
 ## Documentation
 
-[Full project documentation](documentation/project-doc.md)
+[Full project documentation](project-documentation.md)
