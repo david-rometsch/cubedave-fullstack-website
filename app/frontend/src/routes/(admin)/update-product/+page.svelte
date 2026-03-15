@@ -3,6 +3,7 @@
 	import { toast } from 'svelte-sonner';
 	import { page } from '$app/state';
 	import { fetchProducts } from '$lib/api.js';
+	import { invalidateProducts } from '$lib/products.svelte.js';
 
 	let product = $state(null);
 	let newProduct = $state({});
@@ -147,6 +148,7 @@
 				onclick={async () => {
 					try {
 						await updateProduct();
+						invalidateProducts();
 						toast.success('Product updated!');
 					} catch {
 						toast.error('Error!');

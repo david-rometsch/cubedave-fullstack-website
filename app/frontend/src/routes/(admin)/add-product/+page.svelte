@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import { fetchProducts } from '$lib/api.js';
+	import { invalidateProducts } from '$lib/products.svelte.js';
 
 	let products = [];
 	let newProduct = {};
@@ -128,7 +129,7 @@
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify(newProduct)
 					});
-					if (response.ok) toast.success('Product added!');
+					if (response.ok) { toast.success('Product added!'); invalidateProducts(); }
 					else toast.error('Error!');
 				}}>add</button
 			>

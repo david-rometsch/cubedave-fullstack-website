@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 	import { fetchProducts } from '$lib/api.js';
+	import { invalidateProducts } from '$lib/products.svelte.js';
 
 	let products = $state([]);
 	let productType = $state('');
@@ -84,6 +85,7 @@
 								const res = await fetch(`/api/delete_product/${p.id}`, { method: 'DELETE' });
 								if (res.ok) {
 									products = products.filter((x) => x.id !== p.id);
+									invalidateProducts();
 									toast.success('Product deleted!');
 								} else {
 									toast.error('Error!');

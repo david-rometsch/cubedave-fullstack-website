@@ -21,3 +21,8 @@ export async function loadProducts() {
 		products.push(...data);
 	}
 }
+
+/** Clear the cache so the next loadProducts() call fetches fresh data. */
+export function invalidateProducts() {
+	products.splice(0);
+}
