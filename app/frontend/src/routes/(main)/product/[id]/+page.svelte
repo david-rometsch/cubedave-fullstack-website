@@ -2,17 +2,16 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { addToCart } from '$lib/cart.svelte.js';
-	import { fetchProducts } from '$lib/api.js';
+	import { products, loadProducts } from '$lib/products.svelte.js';
 
 	// Read dynamic route segment — e.g. /product/3 → id = "3"
 	const id = page.params.id;
-	let product = $state(null);
 	let quantity = $state(1);
 
-	onMount(async () => {
-		const all = await fetchProducts();
-		product = all.find((p) => p.id == id) ?? null;
-	});
+	onMount(loadProducts);
+
+	// Derived from the shared store — no extra fetch needed if already cached
+	const product = $derived(products.find((p) => p.id == id) ?? null);
 </script>
 
 <a href="/" class="mt-4 inline-block px-6 text-gray-500 hover:text-gray-900">← Shop</a>
