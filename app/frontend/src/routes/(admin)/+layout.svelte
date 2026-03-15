@@ -32,7 +32,7 @@
 	</ul>
 </nav>
 
-<section class="content flex-1">{@render children()}</section>
+<section class="content flex-1 overflow-x-auto">{@render children()}</section>
 
 <!-- Footer: admin actions and visit counter -->
 <div class="bg-gray-300 px-6 py-3">

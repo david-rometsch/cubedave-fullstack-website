@@ -35,7 +35,7 @@
 	</ul>
 </nav>
 
-<section class="content flex-1">{@render children()}</section>
+<section class="content flex-1 overflow-x-auto">{@render children()}</section>
 
 <!-- Footer with hidden admin link -->
 <div class="bg-gray-900 px-6 py-3">

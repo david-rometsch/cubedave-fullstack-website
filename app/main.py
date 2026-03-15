@@ -1,17 +1,16 @@
 """
 main.py — FastAPI application entry point.
-Handles database setup, seeding, and all REST API endpoints.
+Registers middleware, seeds the database on startup, and defines all REST API endpoints.
 """
 
 import json
-from contextlib import contextmanager
 
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import Session
 
-from models import Base, Order, OrderRequest, Product, ProductCreateSchema, ProductOrder, ProductSchema, Visit
+from database import get_db, get_session
+from models import Order, OrderRequest, Product, ProductCreateSchema, ProductOrder, ProductSchema, Visit
 
 app = FastAPI()
 
@@ -22,36 +21,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# SQLite database engine
-engine = create_engine("sqlite:///database.db")
-
-# Session factory — autocommit disabled so commits are explicit
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-@contextmanager
-def get_session():
-    """Context manager for database sessions used in startup/seeding code."""
-    session = SessionLocal()
-    try:
-        yield session
-        session.commit()
-    finally:
-        session.close()
-
-
-def get_db():
-    """Dependency-injected session for FastAPI route handlers."""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-# Create all tables defined in models if they don't exist yet
-Base.metadata.create_all(engine)
 
 # Seed the database with products from product.json if the table is empty
 with get_session() as session:

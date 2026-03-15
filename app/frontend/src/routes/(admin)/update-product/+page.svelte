@@ -131,7 +131,7 @@
 				required
 				maxlength="250"
 				rows="10"
-				>textarea</textarea
+				>
 			>
 		</div>
 

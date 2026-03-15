@@ -69,5 +69,5 @@ def get_person_name(one_person: Person):
 
 ## related
 [[pydantic.md]]
-[[annotated.md]]
+[[annotated]]
 

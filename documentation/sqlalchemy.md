@@ -25,7 +25,7 @@ Base.metadata.create_all(engine)
 
 from sqlalchemy.orm import session_maker
 
-Session=session_maker() # session factory -> session class
-session=Session(bind=engine) # session-object pro context!
+Session=session_maker() # session factory -> session class  
+session=Session(bind=engine) # session-object pro context! - session.
 
 new line in sqlalchemy
