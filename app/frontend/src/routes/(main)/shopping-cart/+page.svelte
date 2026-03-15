@@ -5,6 +5,7 @@
 
 	let customerName = $state('');
 
+	// Re-computed whenever cart contents or quantities change
 	const total = $derived(
 		cart.reduce((sum, item) => sum + (item.product.price ?? 0) * item.quantity, 0)
 	);
@@ -56,6 +57,7 @@
 							<td class="px-4 py-2">{item.product.name}</td>
 							<td class="px-4 py-2">{item.product.price != null ? `sFr. ${item.product.price.toFixed(2)}` : '—'}</td>
 							<td class="px-4 py-2">
+								<!-- Quantity is bound directly to cart state — subtotal updates reactively -->
 								<select
 									class="w-14 rounded border border-gray-300 py-1 pl-2 pr-6"
 									bind:value={item.quantity}
@@ -79,7 +81,7 @@
 				</tfoot>
 			</table>
 
-			<!-- customer name -->
+			<!-- Customer name required before confirming order -->
 			<div class="mt-6 flex items-center gap-3">
 				<label class="w-36 text-right text-sm font-bold text-gray-700">Name</label>
 				<input

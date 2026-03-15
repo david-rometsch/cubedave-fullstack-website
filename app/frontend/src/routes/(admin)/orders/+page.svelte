@@ -28,6 +28,7 @@
 				<td class="px-4 py-2">{o.customer_name}</td>
 				<td class="px-4 py-2">sFr. {o.total.toFixed(2)}</td>
 				<td class="px-4 py-2">
+					<!-- Navigate to dynamic order detail route -->
 					<button
 						class="rounded bg-gray-800 px-3 py-1 text-sm text-white transition hover:bg-yellow-400 hover:text-gray-900"
 						onclick={() => goto(`/orders/${o.id}`)}

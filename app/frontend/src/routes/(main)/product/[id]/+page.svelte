@@ -4,6 +4,7 @@
 	import { addToCart } from '$lib/cart.svelte.js';
 	import { fetchProducts } from '$lib/api.js';
 
+	// Read dynamic route segment — e.g. /product/3 → id = "3"
 	const id = page.params.id;
 	let product = $state(null);
 	let quantity = $state(1);

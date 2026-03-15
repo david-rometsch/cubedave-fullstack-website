@@ -1,3 +1,7 @@
+"""
+models.py — SQLAlchemy ORM models and Pydantic validation schemas.
+"""
+
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import Column, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import DeclarativeBase, relationship
@@ -7,7 +11,8 @@ class Base(DeclarativeBase):
     pass
 
 
-# ==== product model ====
+# ==== ORM models ====
+
 class Product(Base):
     __tablename__ = "products"
     id = Column(Integer, primary_key=True)
@@ -18,31 +23,11 @@ class Product(Base):
     category = Column(String(100), nullable=False)
     price = Column(Float, nullable=True)
     description = Column(String(100), nullable=True)
-    image = Column(Text, nullable=True)
+    image = Column(Text, nullable=True)  # stored as base64 data URL
 
     order_associations = relationship("ProductOrder", back_populates="product")
 
 
-# pydantic schemes
-class ProductCreateSchema(BaseModel):
-    name: str
-    size: str
-    brand: str
-    info: str | None = None
-    category: str
-    price: float | None = None
-    description: str
-    image: str | None = None
-
-
-# extension for basic scheme including id (used in update)
-class ProductSchema(ProductCreateSchema):
-    id: int
-    # model_config makes sqlalchemy models readable for pydantic
-    model_config = ConfigDict(from_attributes=True)
-
-
-# ==== Order model ====
 class Order(Base):
     __tablename__ = "orders"
     id = Column(Integer, primary_key=True)
@@ -51,8 +36,8 @@ class Order(Base):
     product_associations = relationship("ProductOrder", back_populates="order")
 
 
-# ==== ProductOrder association object including quantity field ====
 class ProductOrder(Base):
+    """Association table between Order and Product, carrying the ordered quantity."""
     __tablename__ = "product_orders"
 
     product_id = Column(Integer, ForeignKey("products.id"), primary_key=True)
@@ -63,7 +48,26 @@ class ProductOrder(Base):
     order = relationship("Order", back_populates="product_associations")
 
 
-# pydantic
+# ==== Pydantic schemas ====
+
+class ProductCreateSchema(BaseModel):
+    """Validates incoming product data for creation (no id required)."""
+    name: str
+    size: str
+    brand: str
+    info: str | None = None
+    category: str
+    price: float | None = None
+    description: str
+    image: str | None = None
+
+
+class ProductSchema(ProductCreateSchema):
+    """Extends ProductCreateSchema with id — used for responses and updates."""
+    id: int
+    model_config = ConfigDict(from_attributes=True)
+
+
 class ProductOrderSchema(BaseModel):
     quantity: int
     product: ProductSchema
@@ -71,7 +75,6 @@ class ProductOrderSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-# order pydantic scheme
 class OrderSchema(BaseModel):
     id: int
     customer_name: str
@@ -81,5 +84,6 @@ class OrderSchema(BaseModel):
 
 
 class OrderRequest(BaseModel):
+    """Validates the order payload sent from the cart."""
     customer_name: str
-    items: list[dict]  # [{product_id, quantity}]
+    items: list[dict]  # list of {product_id, quantity}

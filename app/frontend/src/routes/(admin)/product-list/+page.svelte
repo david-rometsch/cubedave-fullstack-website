@@ -4,8 +4,10 @@
 	import { toast } from 'svelte-sonner';
 	import { fetchProducts } from '$lib/api.js';
 
-	let products = $state([]); // gets tracked now
+	let products = $state([]);
 	let productType = $state('');
+
+	// Re-computed whenever the filter or product list changes
 	const filteredproduct = $derived(
 		productType === '' ? products : products.filter((p) => p.category == productType)
 	);
@@ -17,6 +19,7 @@
 
 <h1 class="my-8 text-center text-3xl font-bold">All Products</h1>
 
+<!-- Category filter buttons -->
 <div class="mt-4 flex gap-3">
 	<button
 		class="rounded bg-gray-800 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
@@ -40,7 +43,7 @@
 	>others</button>
 </div>
 
-<!-- Tabelle -->
+<!-- Product table with update and delete actions -->
 <table class="mt-6 w-full border-collapse">
 	<thead class="bg-gray-500 text-white">
 		<tr>
@@ -74,6 +77,7 @@
 							class="w-20 rounded bg-gray-800 px-2 py-1 text-sm text-white transition hover:bg-yellow-400 hover:text-gray-900"
 							onclick={() => goto(`/update-product/?id=${p.id}`)}
 						>update</button>
+						<!-- Delete removes the product from the DB and updates the local list reactively -->
 						<button
 							class="w-20 rounded bg-red-700 px-2 py-1 text-sm text-white transition hover:bg-yellow-400 hover:text-gray-900"
 							onclick={async () => {
@@ -88,7 +92,6 @@
 						>delete</button>
 					</div>
 				</td>
-				<!-- <td><button>change</button></td> -->
 			</tr>
 		{/each}
 	</tbody>

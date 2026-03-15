@@ -9,4 +9,3 @@ FROM jonasal/nginx-certbot:latest
 RUN mkdir -p /usr/share/nginx/html
 COPY --from=builder /app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-# aendern fuer certbot certificate
