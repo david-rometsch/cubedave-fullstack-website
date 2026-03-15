@@ -30,5 +30,5 @@ class ProductOrder {
 
 
 Product      "1" --* "0..*" ProductOrder : order_associations
-Order        "1" --![Klassendiagramm](./docs/class-diagram.svg) "0..*" ProductOrder : product_associations
+Order        "1" --* "0..*" ProductOrder : product_associations
 @enduml
