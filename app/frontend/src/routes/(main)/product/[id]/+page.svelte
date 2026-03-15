@@ -2,17 +2,15 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { addToCart } from '$lib/cart.svelte.js';
+	import { fetchProducts } from '$lib/api.js';
 
 	const id = page.params.id;
 	let product = $state(null);
 	let quantity = $state(1);
 
 	onMount(async () => {
-		const res = await fetch('/api/all_product');
-		if (res.ok) {
-			const all = await res.json();
-			product = all.find((p) => p.id == id) ?? null;
-		}
+		const all = await fetchProducts();
+		product = all.find((p) => p.id == id) ?? null;
 	});
 </script>
 

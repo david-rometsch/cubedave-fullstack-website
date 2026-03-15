@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { cart, addToCart } from '$lib/cart.svelte.js';
+	import { fetchProducts } from '$lib/api.js';
 
 	let quantities = $state({});
 	let product = $state([]); // gets tracked now
@@ -15,23 +16,8 @@
 				: product.filter((p) => p.category == productType)
 	);
 
-	// fetch product from BE
-	onMount(() => {
-		async function getAllproduct() {
-			let responseJson = '';
-			try {
-				let response = await fetch('/api/all_product');
-				if (!response.ok) throw new Error(`HTTP Fehler! Status: ${response.status}`);
-				responseJson = await response.json();
-				// console.log(`product: ${product}`);
-				console.log(`response json: ${responseJson}`);
-				product = responseJson;
-			} catch (err) {
-				// output.textContent = "Fehler: " + err.message
-				// console.error('Fetch-Fehler:', err);
-			}
-		}
-		getAllproduct();
+	onMount(async () => {
+		product = await fetchProducts();
 	});
 </script>
 
@@ -112,6 +98,7 @@
 					<select
 						class="w-14 rounded border border-gray-300 py-1 pl-2 pr-6"
 						bind:value={quantities[product.id]}
+						onclick={(e) => e.stopPropagation()}
 					>
 						{#each [1,2,3,4,5,6,7,8,9,10] as n}
 							<option value={n}>{n}</option>
@@ -121,7 +108,7 @@
 				<td class="px-4 py-2">
 					<button
 						class="rounded bg-gray-800 px-3 py-1 text-sm text-white transition hover:bg-yellow-400 hover:text-gray-900"
-						onclick={() => addToCart(product, quantities[product.id] ?? 1)}
+						onclick={(e) => { e.stopPropagation(); addToCart(product, quantities[product.id] ?? 1); }}
 					>add</button>
 				</td>
 			</tr>

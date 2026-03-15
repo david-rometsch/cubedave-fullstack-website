@@ -18,7 +18,7 @@
 	<div class="mt-6 flex justify-center">
 		<div class="w-full max-w-2xl">
 			<table class="w-full border-collapse">
-				<thead class="bg-gray-500 text-white">
+				<thead class="b text-whit bg-gray-500">
 					<tr>
 						<th class="px-4 py-2 text-left">Product</th>
 						<th class="px-4 py-2 text-left">Price</th>
@@ -30,7 +30,8 @@
 					{#each order.items as item}
 						<tr class="border-b border-gray-200">
 							<td class="px-4 py-2">{item.product_name}</td>
-							<td class="px-4 py-2">{item.price != null ? `sFr. ${item.price.toFixed(2)}` : '—'}</td>
+							<td class="px-4 py-2">{item.price != null ? `sFr. ${item.price.toFixed(2)}` : '—'}</td
+							>
 							<td class="px-4 py-2">{item.quantity}</td>
 							<td class="px-4 py-2">sFr. {item.subtotal.toFixed(2)}</td>
 						</tr>

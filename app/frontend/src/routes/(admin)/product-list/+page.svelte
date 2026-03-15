@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
-	// import { getAllproduct } from '$lib/api.js';
+	import { fetchProducts } from '$lib/api.js';
 
 	let products = $state([]); // gets tracked now
 	let productType = $state('');
@@ -10,22 +10,8 @@
 		productType === '' ? products : products.filter((p) => p.category == productType)
 	);
 
-	// fetch product from BE
-	onMount(() => {
-		async function getAllproduct() {
-			let responseJson = '';
-			try {
-				let response = await fetch('/api/all_product');
-				if (!response.ok) throw new Error(`HTTP Fehler! Status: ${response.status}`);
-				responseJson = await response.json();
-				console.log(`response json: ${responseJson}`);
-				products = responseJson;
-			} catch (err) {
-				// output.textContent = "Fehler: " + err.message
-				// console.error('Fetch-Fehler:', err);
-			}
-		}
-		getAllproduct();
+	onMount(async () => {
+		products = await fetchProducts();
 	});
 </script>
 

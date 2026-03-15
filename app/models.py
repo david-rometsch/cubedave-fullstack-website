@@ -22,11 +22,6 @@ class Product(Base):
 
     order_associations = relationship("ProductOrder", back_populates="product")
 
-    @classmethod
-    def read_all(cls, session) -> list[type]:
-        """Return list of all instances or []"""
-        return session.query(cls).all()
-
 
 # pydantic schemes
 class ProductCreateSchema(BaseModel):
@@ -83,3 +78,8 @@ class OrderSchema(BaseModel):
     product_associations: list[ProductOrderSchema]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class OrderRequest(BaseModel):
+    customer_name: str
+    items: list[dict]  # [{product_id, quantity}]

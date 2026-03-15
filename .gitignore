@@ -1,5 +1,6 @@
 .venv/
 .envrc
+database.py
 __pycache__/
 instance/
 archive/

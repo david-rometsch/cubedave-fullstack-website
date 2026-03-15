@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
-	import { marked } from 'marked';
+	import { fetchProducts } from '$lib/api.js';
 
 	let products = [];
 	let newProduct = {};
@@ -18,23 +18,8 @@
 		};
 		reader.readAsDataURL(file);
 	}
-	// fetch product-fields dynamically
-	onMount(() => {
-		async function getAllproduct() {
-			let responseJson = '';
-			try {
-				let response = await fetch('/api/all_product');
-				if (!response.ok) throw new Error(`HTTP Fehler! Status: ${response.status}`);
-				responseJson = await response.json();
-				products = responseJson;
-				console.log(products);
-				// console.log(product);
-			} catch (err) {
-				// output.textContent = "Fehler: " + err.message
-				console.error('Fetch-Fehler:', err);
-			}
-		}
-		getAllproduct();
+	onMount(async () => {
+		products = await fetchProducts();
 	});
 	//prepare placeholderf vor each field
 	const placeholder = {
@@ -81,11 +66,14 @@
 		{/each}
 		<!-- image drag & drop -->
 		<div class="flex gap-1">
-			<label class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white">
+			<label for="image-drop" class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white">
 				image
 			</label>
 			<div
+				id="image-drop"
 				class="flex w-72 items-center justify-center rounded border-2 border-dashed border-gray-400 px-4 py-4 text-sm text-gray-400 transition hover:border-gray-700"
+				role="button"
+				tabindex="0"
 				ondrop={handleDrop}
 				ondragover={(e) => e.preventDefault()}
 			>

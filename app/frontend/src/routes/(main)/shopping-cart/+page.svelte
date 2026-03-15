@@ -32,6 +32,8 @@
 	}
 </script>
 
+<a href="/" class="mt-4 inline-block px-6 text-gray-500 hover:text-gray-900">← Shop</a>
+
 <h1 class="my-8 text-center text-3xl font-bold">Shopping Cart</h1>
 
 {#if cart.length === 0}

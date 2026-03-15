@@ -1,8 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
-	import { marked } from 'marked';
 	import { page } from '$app/state';
+	import { fetchProducts } from '$lib/api.js';
 
 	let product = $state(null);
 	let newProduct = $state({});
@@ -22,18 +22,11 @@
 	const id = page.url.searchParams.get('id');
 
 	onMount(async () => {
-		try {
-			let response = await fetch('/api/all_product');
-			if (!response.ok) throw new Error(`HTTP Fehler! Status: ${response.status}`);
-			let products = await response.json();
-			product = products.find((p) => p.id == id) ?? null;
-			console.log(`product/id given from product-list: ${product} / ${id}`);
-			if (product) {
+		const products = await fetchProducts();
+		product = products.find((p) => p.id == id) ?? null;
+		if (product) {
 			newProduct = { ...product };
 			imagePreview = product.image ?? '';
-		}
-		} catch (err) {
-			console.error('Fetch-Fehler:', err);
 		}
 	});
 
@@ -94,7 +87,7 @@
 		{/each}
 		<!-- image drag & drop -->
 		<div class="flex gap-1">
-			<label class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white">
+			<label for="image-drop" class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white">
 				image
 			</label>
 			<div class="flex flex-col gap-2">
@@ -104,7 +97,10 @@
 					<span class="text-sm text-gray-400">kein Bild</span>
 				{/if}
 				<div
+					id="image-drop"
 					class="flex w-72 items-center justify-center rounded border-2 border-dashed border-gray-400 px-4 py-4 text-sm text-gray-400 transition hover:border-gray-700"
+					role="button"
+					tabindex="0"
 					ondrop={handleDrop}
 					ondragover={(e) => e.preventDefault()}
 				>

@@ -2,35 +2,31 @@ import json
 import os
 from contextlib import contextmanager
 
-import uvicorn
 
 # fastapi imports
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles  # included in fastapi.
 
-from pydantic import BaseModel
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from models import Base, Order, OrderSchema, Product, ProductCreateSchema, ProductOrder, ProductSchema
+from models import Base, Order, OrderRequest, OrderSchema, Product, ProductCreateSchema, ProductOrder, ProductSchema
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "https://cubedave.ch"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-if os.path.exists("database.db"):
-    os.remove("database.db")  # avoid confilcts with pre-existing table
-    print("removed db...")
-    # exit()
+
 # create engine
 engine = create_engine("sqlite:///database.db")
 print("created db...")
+
+
 # create Session-object
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -46,7 +42,8 @@ def get_session():
         session.close()
 
 
-def get_db():  # without contextmanager for post/Depends()
+# without contextmanager for e.g. post/Depends()
+def get_db():  
     db = SessionLocal()
     try:
         yield db
@@ -57,29 +54,31 @@ def get_db():  # without contextmanager for post/Depends()
 # create tables
 Base.metadata.create_all(engine)
 
-if True:  # seed demodata - set false later
 
-    def load_json_product():
-        with open("./static/product.json", "r", encoding="utf-8") as f:
-            dict_of_product = json.load(f)
-        # print("dict of product : ", dict_of_product)
-        return dict_of_product
+# seed  if db is empty
+with get_session() as session:
+    if session.query(Product).count() == 0 :  
+        def load_json_product():
+            with open("./static/product.json", "r", encoding="utf-8") as f:
+                dict_of_product = json.load(f)
+            # print("dict of product : ", dict_of_product)
+            return dict_of_product
 
-    # seed product
-    seed_product = load_json_product()
-    with get_session() as session:
-        if session.query(Product).count() == 0:  # only if no products available.
-            for s_product in seed_product["product"]:
-                product = Product(**s_product)
-                session.add(product)
-                print("added", product)
+        # seed product
+        seed_product = load_json_product()
+        with get_session() as session:
+            if session.query(Product).count() == 0:  # only if no products available.
+                for s_product in seed_product["product"]:
+                    product = Product(**s_product)
+                    session.add(product)
+                    print("added", product)
 
 
 # ==== API ====
 @app.get("/api/all_product", response_model=list[ProductSchema])
 async def load_product():
     with get_session() as session:
-        products = Product.read_all(session)
+        products = session.query(Product).all()
         return [ProductSchema.model_validate(p) for p in products]
 
 
@@ -100,7 +99,7 @@ def add_product(
 @app.post("/api/save_data")
 def save_data():
     with get_session() as session:
-        products = Product.read_all(session)
+        products = session.query(Product).all()
         data = []
         for p in products:
             d = ProductSchema.model_validate(p).model_dump(exclude={'id'})
@@ -123,10 +122,6 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
 
 
 # create order from cart
-class OrderRequest(BaseModel):
-    customer_name: str
-    items: list[dict]  # [{product_id, quantity}]
-
 @app.post("/api/order")
 def create_order(order_req: OrderRequest, db: Session = Depends(get_db)):
     order = Order(customer_name=order_req.customer_name)
