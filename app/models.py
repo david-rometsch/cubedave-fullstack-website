@@ -3,7 +3,8 @@ models.py — SQLAlchemy ORM models and Pydantic validation schemas.
 """
 
 from pydantic import BaseModel, ConfigDict
-from sqlalchemy import Column, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Text
+from datetime import datetime, timezone
 from sqlalchemy.orm import DeclarativeBase, relationship
 
 
@@ -81,6 +82,13 @@ class OrderSchema(BaseModel):
     product_associations: list[ProductOrderSchema]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class Visit(Base):
+    """Records each shop visit with a timestamp."""
+    __tablename__ = "visits"
+    id = Column(Integer, primary_key=True)
+    visited_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 
 class OrderRequest(BaseModel):

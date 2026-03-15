@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from models import Base, Order, OrderRequest, Product, ProductCreateSchema, ProductOrder, ProductSchema
+from models import Base, Order, OrderRequest, Product, ProductCreateSchema, ProductOrder, ProductSchema, Visit
 
 app = FastAPI()
 
@@ -148,6 +148,32 @@ def get_order(order_id: int, db: Session = Depends(get_db)):
     ]
     total = round(sum(i["subtotal"] for i in items), 2)
     return {"id": o.id, "customer_name": o.customer_name, "total": total, "items": items}
+
+
+@app.post("/api/visit")
+def record_visit(db: Session = Depends(get_db)):
+    """Record a shop visit."""
+    db.add(Visit())
+    db.commit()
+    return {"status": "recorded"}
+
+
+@app.get("/api/visits")
+def get_visits(db: Session = Depends(get_db)):
+    """Return total number of shop visits."""
+    return {"count": db.query(Visit).count()}
+
+
+@app.post("/api/restore_data")
+def restore_data():
+    """Delete all products and reload from the original seed file (product_default.json)."""
+    with get_session() as session:
+        session.query(Product).delete()
+        with open("./static/product_default.json", "r", encoding="utf-8") as f:
+            seed_data = json.load(f)
+        for item in seed_data["product"]:
+            session.add(Product(**item))
+    return {"status": "restored"}
 
 
 @app.put("/api/update_product/{product_id}")

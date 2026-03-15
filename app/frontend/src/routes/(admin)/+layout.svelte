@@ -1,8 +1,15 @@
 <script>
+	import { onMount } from 'svelte';
 	import '../layout.css';
 	import { Toaster, toast } from 'svelte-sonner';
 
 	let { children } = $props();
+	let visitCount = $state(0);
+
+	onMount(async () => {
+		const res = await fetch('/api/visits');
+		if (res.ok) ({ count: visitCount } = await res.json());
+	});
 </script>
 
 <!-- Toast notification container -->
@@ -27,7 +34,7 @@
 
 <section class="content flex-1">{@render children()}</section>
 
-<!-- Footer: persists current DB state back to the seed file -->
+<!-- Footer: admin actions and visit counter -->
 <div class="bg-gray-300 px-6 py-3">
 	<ul class="flex items-center gap-6">
 		<li>
@@ -42,5 +49,18 @@
 				Save Demo Data
 			</button>
 		</li>
+		<li>
+			<button
+				class="cursor-pointer text-red-700 hover:text-yellow-400"
+				onclick={async () => {
+					const res = await fetch('/api/restore_data', { method: 'POST' });
+					if (res.ok) toast.success('Demo data restored!');
+					else toast.error('Fehler beim Wiederherstellen');
+				}}
+			>
+				Restore Demo Data
+			</button>
+		</li>
+		<li class="ml-auto text-gray-600 text-sm">Visits: {visitCount}</li>
 	</ul>
 </div>

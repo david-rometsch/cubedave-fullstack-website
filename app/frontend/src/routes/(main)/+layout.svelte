@@ -1,9 +1,15 @@
 <script>
+	import { onMount } from 'svelte';
 	import '../layout.css';
 	import { Toaster } from 'svelte-sonner';
 	import { cart } from '$lib/cart.svelte.js';
 
 	let { children } = $props();
+
+	// Record a visit each time the shop is loaded
+	onMount(() => {
+		fetch('/api/visit', { method: 'POST' });
+	});
 </script>
 
 <!-- Toast notification container -->
