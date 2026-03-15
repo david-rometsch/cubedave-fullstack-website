@@ -35,11 +35,9 @@ with get_session() as session:
 # ==== API endpoints ====
 
 @app.get("/api/all_product", response_model=list[ProductSchema])
-async def load_product():
+def load_product(db: Session = Depends(get_db)):
     """Return all products."""
-    with get_session() as session:
-        products = session.query(Product).all()
-        return [ProductSchema.model_validate(p) for p in products]
+    return db.query(Product).all()
 
 
 @app.post("/api/add_product")

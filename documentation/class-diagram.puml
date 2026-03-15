@@ -1,0 +1,79 @@
+@startuml class-diagram
+skinparam classAttributeIconSize 0
+skinparam classFontSize 13
+skinparam packageFontSize 13
+hide empty methods
+
+package "ORM Models" {
+
+    class Product {
+        +id: Integer (PK)
+        +name: String
+        +size: String
+        +brand: String
+        +info: String
+        +category: String
+        +price: Float
+        +description: String
+        +image: Text
+    }
+
+    class Order {
+        +id: Integer (PK)
+        +customer_name: String
+    }
+
+    class ProductOrder {
+        +product_id: Integer (FK)
+        +order_id: Integer (FK)
+        +quantity: Integer
+    }
+
+    class Visit {
+        +id: Integer (PK)
+        +visited_at: DateTime
+    }
+
+    Product      "1" --o "0..*" ProductOrder : order_associations
+    Order        "1" --o "0..*" ProductOrder : product_associations
+}
+
+package "Pydantic Schemas" {
+
+    class ProductCreateSchema {
+        +name: str
+        +size: str
+        +brand: str
+        +info: str | None
+        +category: str
+        +price: float | None
+        +description: str
+        +image: str | None
+    }
+
+    class ProductSchema {
+        +id: int
+    }
+
+    class ProductOrderSchema {
+        +quantity: int
+        +product: ProductSchema
+    }
+
+    class OrderSchema {
+        +id: int
+        +customer_name: str
+        +product_associations: list[ProductOrderSchema]
+    }
+
+    class OrderRequest {
+        +customer_name: str
+        +items: list[dict]
+    }
+
+    ProductCreateSchema <|-- ProductSchema
+    ProductSchema       "1" --* "1" ProductOrderSchema : product
+    ProductOrderSchema  "0..*" --* "1" OrderSchema : product_associations
+}
+
+@enduml

@@ -1,16 +1,44 @@
-# CubeDave Website
-## Aim
-This is an exercise abount implementing a full stack website.
-It contains: 
-- backend with Flask
-  - rendering tamplates using jinja
-  - inheritage of a base template for other sites
-- SQLAlchemy integration in Flask
-  - Models for the shop
-     - Products
-     - Orders
-     - Customer
-- Frontend with JavaScript
-  - loading content dinamically with AIAX
-  
-![Alt-Text](class_diagramm.png)
+# CubeDave's Cube Shop
+
+A full-stack web shop for Rubik's cubes — built with SvelteKit, FastAPI, and SQLite.
+
+**Live:** https://cubedave.ch
+
+---
+
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | SvelteKit 5 + Tailwind CSS 4 |
+| Backend | FastAPI + SQLAlchemy |
+| Database | SQLite |
+| Proxy | Nginx + Let's Encrypt |
+| Deployment | Docker + Docker Compose |
+
+---
+
+## Run locally
+
+```bash
+docker compose up -d --build
+```
+
+App: http://localhost
+API docs: http://localhost/docs
+
+---
+
+## Run tests
+
+```bash
+cd app
+source .venv/bin/activate
+pytest test_main.py -v
+```
+
+---
+
+## Documentation
+
+[Full project documentation](documentation/project-doc.md)
