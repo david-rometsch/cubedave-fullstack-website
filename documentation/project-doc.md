@@ -24,14 +24,14 @@ SQLite (database.db)
 
 ## 1.2 Technology Stack
 
-| Layer | Technology | Role |
-|---|---|---|
-| Frontend | SvelteKit 5 + Tailwind CSS 4 | SPA, UI, routing |
-| Backend | FastAPI + Uvicorn | REST API, business logic |
-| ORM | SQLAlchemy | DB abstraction |
-| Database | SQLite | Persistence |
-| Proxy | Nginx + nginx-certbot | SSL, reverse proxy, static serving |
-| Containerisation | Docker + Docker Compose | Deployment |
+| Layer            | Technology                   | Role                               |
+| ---------------- | ---------------------------- | ---------------------------------- |
+| Frontend         | SvelteKit 5 + Tailwind CSS 4 | SPA, UI, routing                   |
+| Backend          | FastAPI + Uvicorn            | REST API, business logic           |
+| ORM              | SQLAlchemy                   | DB abstraction                     |
+| Database         | SQLite                       | Persistence                        |
+| Proxy            | Nginx + nginx-certbot        | SSL, reverse proxy, static serving |
+| Containerisation | Docker + Docker Compose      | Deployment                         |
 
 ## 1.3 Separation of Concerns
 
@@ -46,6 +46,7 @@ SQLite (database.db)
 # 2. Project Structure
 
 **Backend**
+
 ```
 app/
 ├── main.py               # FastAPI routes + startup seeding
@@ -60,6 +61,7 @@ app/
 ```
 
 **Frontend**
+
 ```
 frontend/
 ├── Dockerfile        # Multi-stage: Node build → nginx-certbot
@@ -103,12 +105,12 @@ frontend/
 
 ## 3.3 Tailwind vs. plain CSS
 
-| Tailwind | Plain CSS |
-|---|---|
-| styles directly in markup | separate stylesheet |
-| no naming needed | class naming required (BEM etc.) |
-| purges unused CSS at build | manual cleanup |
-| consistent design tokens | custom variables |
+| Tailwind                   | Plain CSS                        |
+| -------------------------- | -------------------------------- |
+| styles directly in markup  | separate stylesheet              |
+| no naming needed           | class naming required (BEM etc.) |
+| purges unused CSS at build | manual cleanup                   |
+| consistent design tokens   | custom variables                 |
 
 ---
 
@@ -123,22 +125,26 @@ frontend/
 
 Runes are compiler directives that replace the old Svelte store API.
 
-| Rune | Purpose | Used in project |
-|---|---|---|
-| `$state` | reactive variable | `cart`, `products`, `filter`, `quantities` |
-| `$derived` | computed from state | `filteredproduct` in shop page |
-| `$props` | component props | `let { children } = $props()` in layouts |
-| `$effect` | side-effects on state change | (not used, `onMount` preferred) |
+| Rune       | Purpose                      | Used in project                            |
+| ---------- | ---------------------------- | ------------------------------------------ |
+| `$state`   | reactive variable            | `cart`, `products`, `filter`, `quantities` |
+| `$derived` | computed from state          | `filteredproduct` in shop page             |
+| `$props`   | component props              | `let { children } = $props()` in layouts   |
+| `$effect`  | side-effects on state change | (not used, `onMount` preferred)            |
 
 ### `$state` example (cart.svelte.js)
+
 ```js
-export const cart = $state([]);   // reactive array, shared globally
+export const cart = $state([]); // reactive array, shared globally
 ```
 
 ### `$derived` example (shop page)
+
 ```js
 const filteredproduct = $derived(
-    filter.type === '' ? products : products.filter(p => p.category === filter.type)
+  filter.type === ""
+    ? products
+    : products.filter((p) => p.category === filter.type),
 );
 // re-computed automatically whenever products or filter.type changes
 ```
@@ -171,19 +177,19 @@ const filteredproduct = $derived(
 
 ## 5.2 API Endpoints
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/all_product` | All products |
-| POST | `/api/add_product` | Add product |
-| PUT | `/api/update_product/{id}` | Update product (full) |
-| DELETE | `/api/delete_product/{id}` | Delete product |
-| POST | `/api/order` | Create order with line items |
-| GET | `/api/orders` | All orders with totals |
-| GET | `/api/order/{id}` | Single order + items |
-| POST | `/api/visit` | Record a shop visit |
-| GET | `/api/visits` | Total visit count |
-| POST | `/api/save_data` | Persist DB → product.json |
-| POST | `/api/restore_data` | Reset to default products |
+| Method | Endpoint                   | Description                  |
+| ------ | -------------------------- | ---------------------------- |
+| GET    | `/api/all_product`         | All products                 |
+| POST   | `/api/add_product`         | Add product                  |
+| PUT    | `/api/update_product/{id}` | Update product (full)        |
+| DELETE | `/api/delete_product/{id}` | Delete product               |
+| POST   | `/api/order`               | Create order with line items |
+| GET    | `/api/orders`              | All orders with totals       |
+| GET    | `/api/order/{id}`          | Single order + items         |
+| POST   | `/api/visit`               | Record a shop visit          |
+| GET    | `/api/visits`              | Total visit count            |
+| POST   | `/api/save_data`           | Persist DB → product.json    |
+| POST   | `/api/restore_data`        | Reset to default products    |
 
 ## 5.3 FastAPI Features Used
 
@@ -215,10 +221,11 @@ const filteredproduct = $derived(
 ```js
 // products.svelte.js
 export async function loadProducts() {
-    if (products.length === 0) {       // cache check
-        const data = await fetchProducts();
-        products.push(...data);         // triggers re-render of all subscribers
-    }
+  if (products.length === 0) {
+    // cache check
+    const data = await fetchProducts();
+    products.push(...data); // triggers re-render of all subscribers
+  }
 }
 ```
 
@@ -234,12 +241,14 @@ export async function loadProducts() {
 
 ## 7.2 Database Models
 
-| Model | Table | Key Fields |
-|---|---|---|
-| `Product` | `products` | id, name, size, brand, category, price, image (base64) |
-| `Order` | `orders` | id, customer_name |
-| `ProductOrder` | `product_orders` | product_id (FK), order_id (FK), quantity |
-| `Visit` | `visits` | id, visited_at (datetime UTC) |
+| Model          | Table            | Key Fields                                             |
+| -------------- | ---------------- | ------------------------------------------------------ |
+| `Product`      | `products`       | id, name, size, brand, category, price, image (base64) |
+| `Order`        | `orders`         | id, customer_name                                      |
+| `ProductOrder` | `product_orders` | product_id (FK), order_id (FK), quantity               |
+| `Visit`        | `visits`         | id, visited_at (datetime UTC)                          |
+
+![class-diagram](./class-diagram.svg)
 
 ## 7.3 Association Model with Quantity
 
@@ -254,11 +263,11 @@ Order 1 ──── * ProductOrder * ──── 1 Product
 
 ## 7.4 Pydantic Schemas
 
-| Schema | Purpose |
-|---|---|
-| `ProductCreateSchema` | validates POST body (no id) |
-| `ProductSchema` | extends with id, used for PUT + responses |
-| `OrderRequest` | validates order POST: customer_name + items list |
+| Schema                | Purpose                                          |
+| --------------------- | ------------------------------------------------ |
+| `ProductCreateSchema` | validates POST body (no id)                      |
+| `ProductSchema`       | extends with id, used for PUT + responses        |
+| `OrderRequest`        | validates order POST: customer_name + items list |
 
 - `model_config = ConfigDict(from_attributes=True)` → allows ORM object → Pydantic conversion
 - FastAPI uses `response_model` to auto-serialise + strip unwanted fields
@@ -282,12 +291,12 @@ Order 1 ──── * ProductOrder * ──── 1 Product
 
 ## 8.2 Test Cases
 
-| Test | What it tests |
-|---|---|
-| `test_add_and_list_product` | POST product → appears in GET all |
-| `test_delete_product` | POST product → DELETE → not in GET all |
+| Test                          | What it tests                                |
+| ----------------------------- | -------------------------------------------- |
+| `test_add_and_list_product`   | POST product → appears in GET all            |
+| `test_delete_product`         | POST product → DELETE → not in GET all       |
 | `test_create_and_fetch_order` | POST order → GET order returns correct total |
-| `test_visit_counter` | 2x POST visit → GET visits returns count=2 |
+| `test_visit_counter`          | 2x POST visit → GET visits returns count=2   |
 
 ## 8.3 Run Tests
 
@@ -313,6 +322,7 @@ pytest test_main.py -v
 - certs stored in Docker volume `letsencrypt` (persists across restarts)
 
 ### nginx.conf flow
+
 ```
 HTTP :80  →  301 redirect  →  HTTPS :443
 HTTPS :443
@@ -333,12 +343,12 @@ HTTPS :443
 
 ## 10.1 Svelte Compilation vs. React
 
-| | Svelte | React |
-|---|---|---|
-| Runtime shipped to browser | none (compiles away) | ~40–45 KB (react + react-dom) |
-| DOM updates | direct DOM manipulation, compiled | virtual DOM diffing |
-| Bundle size | small | larger baseline |
-| Reactivity | compiler-tracked | hooks + re-render cycle |
+|                            | Svelte                            | React                         |
+| -------------------------- | --------------------------------- | ----------------------------- |
+| Runtime shipped to browser | none (compiles away)              | ~40–45 KB (react + react-dom) |
+| DOM updates                | direct DOM manipulation, compiled | virtual DOM diffing           |
+| Bundle size                | small                             | larger baseline               |
+| Reactivity                 | compiler-tracked                  | hooks + re-render cycle       |
 
 ## 10.2 Product Store – Fetch Once, Cache
 
@@ -360,9 +370,9 @@ HTTPS :443
 
 ## 11.1 Containers
 
-| Service | Image | Role |
-|---|---|---|
-| `fastapi` | custom (python:3.12-slim) | FastAPI + Uvicorn on :8000 |
+| Service        | Image                                | Role                       |
+| -------------- | ------------------------------------ | -------------------------- |
+| `fastapi`      | custom (python:3.12-slim)            | FastAPI + Uvicorn on :8000 |
 | `nginx-svelte` | jonasal/nginx-certbot + static build | Nginx on :80/:443, certbot |
 
 ## 11.2 Frontend Multi-Stage Build
