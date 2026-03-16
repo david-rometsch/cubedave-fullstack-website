@@ -26,7 +26,7 @@ class Product(Base):
     description = Column(String(100), nullable=True)
     image = Column(Text, nullable=True)  # stored as base64 data URL
 
-    order_associations = relationship("ProductOrder", back_populates="product")
+    order_associations = relationship("ProductOrder", back_populates="product", cascade="all, delete-orphan")
 
 
 class Order(Base):
@@ -59,7 +59,7 @@ class ProductCreateSchema(BaseModel):
     info: str | None = None
     category: str
     price: float | None = None
-    description: str
+    description: str | None = None
     image: str | None = None
 
 

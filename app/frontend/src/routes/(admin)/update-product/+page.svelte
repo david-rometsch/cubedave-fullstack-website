@@ -29,7 +29,7 @@
 		const products = await fetchProducts();
 		product = products.find((p) => p.id == id) ?? null;
 		if (product) {
-			newProduct = { ...product };  // copy so edits don't mutate the original
+			newProduct = { ...product }; // copy so edits don't mutate the original
 			imagePreview = product.image ?? '';
 		}
 	});
@@ -37,7 +37,7 @@
 	async function updateProduct() {
 		const response = await fetch(`/api/update_product/${newProduct.id}`, {
 			method: 'PUT',
-			headers: {'Content-Type': 'application/json'},
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(newProduct)
 		});
 		if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -57,7 +57,9 @@
 	};
 </script>
 
-<a href="/product-list/" class="mt-4 inline-block px-6 text-gray-500 hover:text-gray-900">← Product List</a>
+<a href="/product-list/" class="mt-4 inline-block px-6 text-gray-500 hover:text-gray-900"
+	>← Product List</a
+>
 <h1 class="my-8 text-center text-3xl font-bold">Update Product with id: {product?.id}</h1>
 <div class="mt-8 flex justify-center">
 	<div class="flex flex-col gap-4">
@@ -92,7 +94,10 @@
 
 		<!-- Image drag & drop — shows current image above the drop zone -->
 		<div class="flex gap-1">
-			<label for="image-drop" class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white">
+			<label
+				for="image-drop"
+				class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white"
+			>
 				image
 			</label>
 			<div class="flex flex-col gap-2">
@@ -131,8 +136,8 @@
 				required
 				maxlength="250"
 				rows="10"
-				>
 			>
+			</textarea>
 		</div>
 
 		<!-- buttons -->

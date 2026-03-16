@@ -5,7 +5,7 @@ Registers middleware, seeds the database on startup, and defines all REST API en
 
 import json
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
@@ -70,6 +70,8 @@ def save_data():
 def delete_product(product_id: int, db: Session = Depends(get_db)):
     """Delete a product by its ID."""
     db_product = db.get(Product, product_id)
+    if db_product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
     db.delete(db_product)
     db.commit()
     return {"status": "deleted"}

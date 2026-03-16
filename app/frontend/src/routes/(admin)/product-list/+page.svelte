@@ -2,20 +2,22 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
-	import { fetchProducts } from '$lib/api.js';
-	import { invalidateProducts } from '$lib/products.svelte.js';
+	import { products, reloadProducts } from '$lib/products.svelte.js';
 
-	let products = $state([]);
 	let productType = $state('');
+
+	const known = ['3x3', '4x4', '2x2'];
 
 	// Re-computed whenever the filter or product list changes
 	const filteredproduct = $derived(
-		productType === '' ? products : products.filter((p) => p.category == productType)
+		productType === ''
+			? products
+			: productType === 'others'
+				? products.filter((p) => !known.includes(p.category))
+				: products.filter((p) => p.category == productType)
 	);
 
-	onMount(async () => {
-		products = await fetchProducts();
-	});
+	onMount(reloadProducts);
 </script>
 
 <h1 class="my-8 text-center text-3xl font-bold">All Products</h1>
@@ -84,8 +86,8 @@
 							onclick={async () => {
 								const res = await fetch(`/api/delete_product/${p.id}`, { method: 'DELETE' });
 								if (res.ok) {
-									products = products.filter((x) => x.id !== p.id);
-									invalidateProducts();
+									const idx = products.findIndex((x) => x.id === p.id);
+									if (idx !== -1) products.splice(idx, 1);
 									toast.success('Product deleted!');
 								} else {
 									toast.error('Error!');

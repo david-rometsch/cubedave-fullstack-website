@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import '../layout.css';
 	import { Toaster, toast } from 'svelte-sonner';
+	import { reloadProducts } from '$lib/products.svelte.js';
 
 	let { children } = $props();
 	let visitCount = $state(0);
@@ -54,8 +55,12 @@
 				class="cursor-pointer text-red-700 hover:text-yellow-400"
 				onclick={async () => {
 					const res = await fetch('/api/restore_data', { method: 'POST' });
-					if (res.ok) toast.success('Demo data restored!');
-					else toast.error('Fehler beim Wiederherstellen');
+					if (res.ok) {
+						await reloadProducts();
+						toast.success('Demo data restored!');
+					} else {
+						toast.error('Fehler beim Wiederherstellen');
+					}
 				}}
 			>
 				Restore Demo Data

@@ -26,3 +26,9 @@ export async function loadProducts() {
 export function invalidateProducts() {
 	products.splice(0);
 }
+
+/** Always fetch fresh data from the API and replace the cache. */
+export async function reloadProducts() {
+	const data = await fetchProducts();
+	products.splice(0, products.length, ...data);
+}

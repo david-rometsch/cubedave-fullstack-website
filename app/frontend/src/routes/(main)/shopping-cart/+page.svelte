@@ -83,8 +83,9 @@
 
 			<!-- Customer name required before confirming order -->
 			<div class="mt-6 flex items-center gap-3">
-				<label class="w-36 text-right text-sm font-bold text-gray-700">Name</label>
+				<label for="customer-name" class="w-36 text-right text-sm font-bold text-gray-700">Name</label>
 				<input
+					id="customer-name"
 					type="text"
 					bind:value={customerName}
 					placeholder="Your name"

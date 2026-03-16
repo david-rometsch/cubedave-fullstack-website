@@ -69,30 +69,35 @@ app/
 ```
 
 **Frontend**
-
 ```
-
-frontend/  
-├── Dockerfile # Multi-stage: Node build → nginx-certbot  
-├── nginx.conf # Reverse proxy + SSL config  
-├── svelte.config.js # adapter-static, SPA fallback  
-└── src/  
-├── routes/  
-│ ├── (main)/ # public shop  
-│ │ ├── / # product list  
-│ │ ├── product/[id]/ # detail view  
-│ │ └── shopping-cart/ # cart + checkout  
-│ └── (admin)/ # admin area  
-│ ├── product-list/  
-│ ├── add-product/  
-│ ├── update-product/  
-│ └── orders/[id]/  
-└── lib/  
-├── api.js # fetch products  
-├── products.svelte.js # global product store + cache  
-└── cart.svelte.js # global cart store
-
-````
+frontend/
+├── Dockerfile              # Multi-stage: Node build → nginx-certbot
+├── nginx.conf              # Reverse proxy + SSL config
+├── svelte.config.js        # adapter-static, SPA fallback
+└── src/
+    ├── routes/
+    │   ├── (main)/         # public shop
+    │   │   ├── +page.svelte        # product list
+    │   │   ├── product/
+    │   │   │   └── [id]/+page.svelte   # detail view
+    │   │   ├── shopping-cart/
+    │   │   │   └── +page.svelte       # cart + checkout
+    │   │   └── +layout.svelte         # layout für alle Seiten in (main)
+    │   └── (admin)/        # admin area
+    │       ├── product-list/
+    │       │   └── +page.svelte
+    │       ├── add-product/
+    │       │   └── +page.svelte
+    │       ├── update-product/
+    │       │   └── +page.svelte
+    │       ├── orders/
+    │       │   └── [id]/+page.svelte
+    │       └── +layout.svelte         # layout für alle Seiten in (admin)
+    └── lib/
+        ├── api.js             # fetch products
+        ├── productsStore.js   # global product store + cache
+        └── cartStore.js       # global cart store
+```
 
 ---
 
@@ -143,7 +148,7 @@ Exported from there it can then again be imported in all the pages where it is n
 The Svelte-filesystem is used for routing (file-based routing). A folder containing a `+page.svelte` is automatically a route.  
 This page inherits from the `+layout.svelte`. So all the pages within the `(admin)` area have the same header and footer.
 
-The brackets `()` cause a inheritance stop so there is no further inheritance.
+The brackets `()` allow route groups, They are not visible in the url, but they allow tho have different layouts for different areas (admin and main have an own +layout.svelte) 
 
 A folder `[id]` is named dynamically. If the page gets called like `/api/shop/3`, the id would be 3 in this case.
 
