@@ -91,7 +91,13 @@ class Visit(Base):
     visited_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 
+class OrderItemSchema(BaseModel):
+    """A single line item in an order request."""
+    product_id: int
+    quantity: int
+
+
 class OrderRequest(BaseModel):
     """Validates the order payload sent from the cart."""
     customer_name: str
-    items: list[dict]  # list of {product_id, quantity}
+    items: list[OrderItemSchema]

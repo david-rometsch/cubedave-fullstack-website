@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .    
 
 # Install Python deps
-RUN pip install "fastapi[standard]" sqlalchemy
+RUN pip install -r requirements.txt
 
 EXPOSE 8000  
 

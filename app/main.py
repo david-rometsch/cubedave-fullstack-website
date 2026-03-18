@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from database import get_db, get_session
-from models import Order, OrderRequest, Product, ProductCreateSchema, ProductOrder, ProductSchema, Visit
+from models import Order, OrderItemSchema, OrderRequest, Product, ProductCreateSchema, ProductOrder, ProductSchema, Visit
 
 app = FastAPI()
 
@@ -84,7 +84,7 @@ def create_order(order_req: OrderRequest, db: Session = Depends(get_db)):
     db.add(order)
     db.flush()  # flush to get order.id before inserting line items
     for item in order_req.items:
-        po = ProductOrder(order_id=order.id, product_id=item["product_id"], quantity=item["quantity"])
+        po = ProductOrder(order_id=order.id, product_id=item.product_id, quantity=item.quantity)
         db.add(po)
     db.commit()
     db.refresh(order)
@@ -106,6 +106,8 @@ def get_orders(db: Session = Depends(get_db)):
 def get_order(order_id: int, db: Session = Depends(get_db)):
     """Return a single order with its line items and total."""
     o = db.get(Order, order_id)
+    if o is None:
+        raise HTTPException(status_code=404, detail="Order not found")
     items = [
         {
             "product_name": po.product.name,
@@ -149,6 +151,8 @@ def restore_data():
 def update_product(product_id: int, product: ProductSchema, db: Session = Depends(get_db)):
     """Update one or more fields of an existing product."""
     db_product = db.get(Product, product_id)
+    if db_product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
     for key, value in product.model_dump(exclude={'id'}).items():
         setattr(db_product, key, value)
     db.commit()
