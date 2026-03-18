@@ -84,7 +84,7 @@
 						<button
 							class="w-20 rounded bg-red-700 px-2 py-1 text-sm text-white transition hover:bg-yellow-400 hover:text-gray-900"
 							onclick={async () => {
-								const res = await fetch(`/api/delete_product/${p.id}`, { method: 'DELETE' });
+								const res = await fetch(`/api/products/${p.id}`, { method: 'DELETE' });
 								if (res.ok) {
 									const idx = products.findIndex((x) => x.id === p.id);
 									if (idx !== -1) products.splice(idx, 1);

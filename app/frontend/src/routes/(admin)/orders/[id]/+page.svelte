@@ -7,7 +7,7 @@
 	let order = $state(null);
 
 	onMount(async () => {
-		const res = await fetch(`/api/order/${id}`);
+		const res = await fetch(`/api/orders/${id}`);
 		if (res.ok) order = await res.json();
 	});
 </script>

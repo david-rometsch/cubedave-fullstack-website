@@ -8,7 +8,7 @@
 
 	// Record a visit each time the shop is loaded
 	onMount(() => {
-		fetch('/api/visit', { method: 'POST' });
+		fetch('/api/visits', { method: 'POST' });
 	});
 </script>
 

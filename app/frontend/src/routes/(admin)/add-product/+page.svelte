@@ -123,7 +123,7 @@
 			<button
 				class="ml-auto justify-end gap-4 rounded bg-gray-800 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
 				onclick={async () => {
-					const response = await fetch('/api/add_product', {
+					const response = await fetch('/api/products', {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify(newProduct)

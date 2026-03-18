@@ -5,7 +5,7 @@
 
 /** Fetch all products from the backend. */
 export async function fetchProducts() {
-	const res = await fetch('/api/all_product');
+	const res = await fetch('/api/products');
 	if (!res.ok) throw new Error(`HTTP ${res.status}`);
 	return res.json();
 }

@@ -35,7 +35,7 @@
 	});
 
 	async function updateProduct() {
-		const response = await fetch(`/api/update_product/${newProduct.id}`, {
+		const response = await fetch(`/api/products/${newProduct.id}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(newProduct)

@@ -1,8 +1,8 @@
 services:
   fastapi:
-    image: fastapi
+    build: .
   nginx-svelte:
-    image: nginx-svelte-local
+    build: ./frontend
     ports:
       - "80:80"
       - "443:443"

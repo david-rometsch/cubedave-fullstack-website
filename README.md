@@ -21,6 +21,7 @@ A full-stack web shop for Rubik's cubes — built with SvelteKit, FastAPI, and S
 ## Run locally
 
 ```bash
+cd app
 docker compose up -d --build
 ```
 

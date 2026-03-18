@@ -34,13 +34,13 @@ with get_session() as session:
 
 # ==== API endpoints ====
 
-@app.get("/api/all_product", response_model=list[ProductSchema])
+@app.get("/api/products", response_model=list[ProductSchema])
 def load_product(db: Session = Depends(get_db)):
     """Return all products."""
     return db.query(Product).all()
 
 
-@app.post("/api/add_product")
+@app.post("/api/products")
 def add_product(product: ProductCreateSchema, db: Session = Depends(get_db)):
     """Add a new product to the database."""
     db_product = Product(**product.model_dump())
@@ -66,7 +66,7 @@ def save_data():
     return {"status": "saved"}
 
 
-@app.delete("/api/delete_product/{product_id}")
+@app.delete("/api/products/{product_id}")
 def delete_product(product_id: int, db: Session = Depends(get_db)):
     """Delete a product by its ID."""
     db_product = db.get(Product, product_id)
@@ -77,7 +77,7 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
     return {"status": "deleted"}
 
 
-@app.post("/api/order")
+@app.post("/api/orders")
 def create_order(order_req: OrderRequest, db: Session = Depends(get_db)):
     """Create a new order with all its line items from the cart."""
     order = Order(customer_name=order_req.customer_name)
@@ -102,7 +102,7 @@ def get_orders(db: Session = Depends(get_db)):
     return result
 
 
-@app.get("/api/order/{order_id}")
+@app.get("/api/orders/{order_id}")
 def get_order(order_id: int, db: Session = Depends(get_db)):
     """Return a single order with its line items and total."""
     o = db.get(Order, order_id)
@@ -119,7 +119,7 @@ def get_order(order_id: int, db: Session = Depends(get_db)):
     return {"id": o.id, "customer_name": o.customer_name, "total": total, "items": items}
 
 
-@app.post("/api/visit")
+@app.post("/api/visits")
 def record_visit(db: Session = Depends(get_db)):
     """Record a shop visit."""
     db.add(Visit())
@@ -145,7 +145,7 @@ def restore_data():
     return {"status": "restored"}
 
 
-@app.put("/api/update_product/{product_id}")
+@app.put("/api/products/{product_id}")
 def update_product(product_id: int, product: ProductSchema, db: Session = Depends(get_db)):
     """Update one or more fields of an existing product."""
     db_product = db.get(Product, product_id)

@@ -64,11 +64,11 @@ SAMPLE_PRODUCT = {
 
 def test_add_and_list_product():
     """Adding a product should make it appear in the product list."""
-    response = client.post("/api/add_product", json=SAMPLE_PRODUCT)
+    response = client.post("/api/products", json=SAMPLE_PRODUCT)
     assert response.status_code == 200
     product_id = response.json()["id"]
 
-    response = client.get("/api/all_product")
+    response = client.get("/api/products")
     assert response.status_code == 200
     ids = [p["id"] for p in response.json()]
     assert product_id in ids
@@ -76,12 +76,12 @@ def test_add_and_list_product():
 
 def test_delete_product():
     """Deleting a product should remove it from the product list."""
-    product_id = client.post("/api/add_product", json=SAMPLE_PRODUCT).json()["id"]
+    product_id = client.post("/api/products", json=SAMPLE_PRODUCT).json()["id"]
 
-    response = client.delete(f"/api/delete_product/{product_id}")
+    response = client.delete(f"/api/products/{product_id}")
     assert response.status_code == 200
 
-    ids = [p["id"] for p in client.get("/api/all_product").json()]
+    ids = [p["id"] for p in client.get("/api/products").json()]
     assert product_id not in ids
 
 
@@ -89,17 +89,17 @@ def test_delete_product():
 
 def test_create_and_fetch_order():
     """Creating an order should return an order_id, and fetching it should compute the correct total."""
-    product_id = client.post("/api/add_product", json=SAMPLE_PRODUCT).json()["id"]
+    product_id = client.post("/api/products", json=SAMPLE_PRODUCT).json()["id"]
 
     order_payload = {
         "customer_name": "Alice",
         "items": [{"product_id": product_id, "quantity": 2}],
     }
-    response = client.post("/api/order", json=order_payload)
+    response = client.post("/api/orders", json=order_payload)
     assert response.status_code == 200
     order_id = response.json()["order_id"]
 
-    response = client.get(f"/api/order/{order_id}")
+    response = client.get(f"/api/orders/{order_id}")
     assert response.status_code == 200
     data = response.json()
     assert data["customer_name"] == "Alice"
@@ -110,8 +110,8 @@ def test_create_and_fetch_order():
 
 def test_visit_counter():
     """Recording two visits should result in a count of 2."""
-    client.post("/api/visit")
-    client.post("/api/visit")
+    client.post("/api/visits")
+    client.post("/api/visits")
 
     response = client.get("/api/visits")
     assert response.status_code == 200
