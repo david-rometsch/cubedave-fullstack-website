@@ -11,5 +11,6 @@ services:
     volumes:
       - letsencrypt:/etc/letsencrypt # certbot stores certs here, persists across restarts
 
+# register volume so it gets handled by docker in /var/lib/docker/volulmes
 volumes:
   letsencrypt:

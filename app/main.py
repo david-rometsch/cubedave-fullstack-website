@@ -35,7 +35,7 @@ with get_session() as session:
 # ==== API endpoints ====
 
 @app.get("/api/products", response_model=list[ProductSchema])
-def load_product(db: Session = Depends(get_db)):
+def load_products(db: Session = Depends(get_db)):
     """Return all products."""
     return db.query(Product).all()
 

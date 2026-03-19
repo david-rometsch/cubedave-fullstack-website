@@ -6,8 +6,8 @@ WORKDIR /app
 # Copy project files
 COPY . .    
 
-# Install Python deps
-RUN pip install -r requirements.txt
+# Install Python deps, systemwide, so deactivate protection
+RUN pip install -r requirements.txt  --break-system-packages
 
 EXPOSE 8000  
 

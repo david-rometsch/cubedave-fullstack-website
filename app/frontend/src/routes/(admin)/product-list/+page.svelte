@@ -9,7 +9,7 @@
 	const known = ['3x3', '4x4', '2x2'];
 
 	// Re-computed whenever the filter or product list changes
-	const filteredproduct = $derived(
+	const filteredProducts = $derived(
 		productType === ''
 			? products
 			: productType === 'others'
@@ -60,7 +60,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each filteredproduct as p}
+		{#each filteredProducts as p}
 			<tr class="border-b border-gray-200 hover:bg-gray-100">
 				<td class="px-4 py-2">
 					{#if p.image}

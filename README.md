@@ -8,21 +8,29 @@ A full-stack web shop for Rubik's cubes — built with SvelteKit, FastAPI, and S
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | SvelteKit 5 + Tailwind CSS 4 |
-| Backend | FastAPI + SQLAlchemy |
-| Database | SQLite |
-| Proxy | Nginx + Let's Encrypt |
-| Deployment | Docker + Docker Compose |
+| Layer      | Technology                   |
+| ---------- | ---------------------------- |
+| Frontend   | SvelteKit 5 + Tailwind CSS 4 |
+| Backend    | FastAPI + SQLAlchemy         |
+| Database   | SQLite                       |
+| Proxy      | Nginx + Let's Encrypt        |
+| Deployment | Docker + Docker Compose      |
 
 ---
 
 ## Run locally
 
+### prerequisites
+
+- Docker + Docker Compose
+- (Windows: WSL2 empfohlen)
+
+### run
+
 ```bash
+git clone git@github.com:teko-TIA23/webe-rometsch.git
 cd app
-docker compose up -d --build
+docker compose -f docker-compose.local.yaml up -d --build
 ```
 
 App: http://localhost
@@ -42,4 +50,4 @@ pytest test_main.py -v
 
 ## Documentation
 
-[Full project documentation](project-documentation.md)
+[Full project documentation](documentation/documentation.md)

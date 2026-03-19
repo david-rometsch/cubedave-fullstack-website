@@ -10,7 +10,7 @@
 	const known = ['3x3', '4x4', '2x2'];
 
 	// Re-computed whenever product list or active filter changes
-	const filteredproduct = $derived(
+	const filteredProducts = $derived(
 		filter.type === ''
 			? products
 			: filter.type === 'others'
@@ -72,7 +72,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each filteredproduct as product}
+		{#each filteredProducts as product}
 			<tr class="cursor-pointer border-b border-gray-200 hover:bg-gray-100" onclick={() => goto(`/product/${product.id}`)}>
 				<td class="px-4 py-2">
 					{#if product.image}

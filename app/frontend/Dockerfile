@@ -1,10 +1,10 @@
-# Stage 1: kompiliert
+# Stage 1: compile svelte -> build
 FROM node:20 AS builder
 WORKDIR /app
 COPY . .
 RUN npm install && npm run build 
 
-# Stage 2: nur kopieren
+# Stage 2: copy
 FROM jonasal/nginx-certbot:latest
 RUN mkdir -p /usr/share/nginx/html
 COPY --from=builder /app/build /usr/share/nginx/html

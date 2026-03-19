@@ -1,0 +1,9 @@
+services:
+  fastapi:
+    build: .
+  nginx-svelte:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.local
+    ports:
+      - "80:80"
