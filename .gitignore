@@ -1,7 +1,6 @@
 .venv/
 .envrc
 .claude
-database.py
 __pycache__/
 instance/
 archive/
