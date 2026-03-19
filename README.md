@@ -23,13 +23,13 @@ A full-stack web shop for Rubik's cubes — built with SvelteKit, FastAPI, and S
 ### prerequisites
 
 - Docker + Docker Compose
-- (Windows: WSL2 empfohlen)
+- (Windows: WSL2 recommanded)
 
 ### run
 
 ```bash
-git clone git@github.com:teko-TIA23/webe-rometsch.git
-cd app
+git clone https://github.com/david-rometsch/cubedave-fullstack-website.git
+cd cubedave-fullstack-website/app
 docker compose -f docker-compose.local.yaml up -d --build
 ```
 
@@ -40,9 +40,19 @@ API docs: http://localhost/docs
 
 ## Run tests
 
+### Linux / Mac
+
 ```bash
 cd app
 source .venv/bin/activate
+pytest test_main.py -v
+```
+
+### Windows
+
+```bash
+cd app
+.venv\Scripts\activate
 pytest test_main.py -v
 ```
 
