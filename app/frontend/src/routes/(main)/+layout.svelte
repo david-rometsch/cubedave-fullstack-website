@@ -19,19 +19,16 @@
 	<ul class="flex items-center gap-6">
 		<li class="mr-auto">
 			<a href="/">
-				<img class="h-10 w-10 rounded-full object-cover" alt="cubes-logo" src="images/cube.jpg" />
+				<img
+					class="h-10 w-10 rounded-full object-cover"
+					alt="cubes-logo"
+					src="/images/cube.jpg"
+				/>
 			</a>
 		</li>
-		<li class="text-2xl font-bold text-yellow-400">Get Cubes at CubeDave's Cube Shop</li>
-		<!-- Cart badge shows number of distinct items in cart -->
-		<li class="ml-auto">
-			<a
-				href="/shopping-cart/"
-				class="rounded bg-yellow-400 px-4 py-2 font-bold text-gray-900 transition hover:bg-yellow-300"
-			>
-				Cart ({cart.length})
-			</a>
-		</li>
+		<li class="text-yellow-400"><a href="/tutorial">Tutorial</a></li>
+		<li class="text-yellow-400"><a href="/cube-knowledge">Cube Knowledge</a></li>
+		<li class="text-yellow-400"><a href="/product/shop">Shop</a></li>
 	</ul>
 </nav>
 
