@@ -4,54 +4,54 @@
 	import { fetchProducts } from '$lib/api.js';
 	import { invalidateProducts } from '$lib/products.svelte.js';
 
-	let products = [];
-	let newProduct = {};
-	let imagePreview = '';
+	let products = $state([]);
+	let newProduct = $state({});
+	let imagePreviews = $state({ image: '', image2: '', image3: '' });
 
-	// Convert dropped image file to base64 data URL and store it in newProduct
-	function handleDrop(e) {
-		e.preventDefault();
-		const file = e.dataTransfer.files[0];
-		if (!file) return;
-		const reader = new FileReader();
-		reader.onload = () => {
-			imagePreview = reader.result;
-			newProduct.image = reader.result;
+	function makeDropHandler(field) {
+		return (e) => {
+			e.preventDefault();
+			const file = e.dataTransfer.files[0];
+			if (!file) return;
+			const reader = new FileReader();
+			reader.onload = () => {
+				imagePreviews[field] = reader.result;
+				newProduct[field] = reader.result;
+			};
+			reader.readAsDataURL(file);
 		};
-		reader.readAsDataURL(file);
 	}
 
-	// Load one existing product to derive the field list dynamically
 	onMount(async () => {
 		products = await fetchProducts();
 	});
 
-	// Placeholder type hints shown in each input field
 	const placeholder = {
 		name: 'str',
 		size: 'str',
 		brand: 'str',
 		info: 'str',
 		category: 'str',
-		price: 'float',
-		image: 'str',
-		description: 'str'
+		price: 'float'
 	};
+
+	const imageFields = [
+		{ key: 'image',  label: 'Main image' },
+		{ key: 'image2', label: 'Image 2' },
+		{ key: 'image3', label: 'Image 3' }
+	];
 </script>
 
 <h1 class="my-8 text-center text-3xl font-bold">Add product</h1>
 <div class="mt-8 flex justify-center">
 	<div class="flex flex-col gap-4">
-		<!-- Input rows — generated from the first product's keys, excluding handled fields -->
-		{#each Object.keys(products[0] ?? {}).filter((k) => k !== 'description' && k !== 'id' && k !== 'image') as key}
+
+		<!-- Dynamic text fields with floating label -->
+		{#each Object.keys(products[0] ?? {}).filter((k) => !['id', 'description', 'image', 'image2', 'image3'].includes(k)) as key}
 			<div class="flex gap-1">
-				<label
-					for="name"
-					class=" w- inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white"
-				>
+				<label for={key} class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white">
 					{key}
 				</label>
-
 				<div class="relative">
 					<input
 						id={key}
@@ -61,67 +61,68 @@
 						class="peer w-72 rounded border-2 border-gray-900 px-4 py-2 outline-none"
 						placeholder=" "
 					/>
-					<!-- Floating label acting as type hint -->
 					<label
 						for={key}
-						class="absolute top-2 left-3 text-sm text-gray-400 transition-all peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:bg-white peer-focus:px-1 peer-focus:text-xs peer-[:not(:placeholder-shown)]:-top-3 peer-[:not(:placeholder-shown)]:bg-white peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs"
-						>{placeholder[key]}
-					</label>
+						class="absolute top-2 left-3 text-sm text-gray-400 transition-all
+							peer-placeholder-shown:top-2
+							peer-focus:-top-3 peer-focus:bg-white peer-focus:px-1 peer-focus:text-xs
+							peer-[:not(:placeholder-shown)]:-top-3 peer-[:not(:placeholder-shown)]:bg-white
+							peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs"
+					>{placeholder[key]}</label>
 				</div>
 			</div>
 		{/each}
 
-		<!-- Image drag & drop -->
-		<div class="flex gap-1">
-			<label for="image-drop" class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white">
-				image
+		<!-- Image drop zones -->
+		{#each imageFields as { key, label }}
+			<div class="flex gap-1">
+				<label for="drop-{key}" class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white">
+					{label}
+				</label>
+				<div class="flex flex-col gap-2">
+					{#if imagePreviews[key]}
+						<img src={imagePreviews[key]} alt="preview" class="h-16 w-16 object-contain" />
+					{/if}
+					<div
+						id="drop-{key}"
+						class="flex w-72 items-center justify-center rounded border-2 border-dashed border-gray-400 px-4 py-4 text-sm text-gray-400 transition hover:border-gray-700"
+						role="button"
+						tabindex="0"
+						ondrop={makeDropHandler(key)}
+						ondragover={(e) => e.preventDefault()}
+					>
+						{imagePreviews[key] ? 'Drop to replace' : 'Drop image here'}
+					</div>
+				</div>
+			</div>
+		{/each}
+
+		<!-- Description — plain textarea, HTML supported -->
+		<div class="flex items-start gap-1">
+			<label for="description" class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white">
+				description
 			</label>
-			<div
-				id="image-drop"
-				class="flex w-72 items-center justify-center rounded border-2 border-dashed border-gray-400 px-4 py-4 text-sm text-gray-400 transition hover:border-gray-700"
-				role="button"
-				tabindex="0"
-				ondrop={handleDrop}
-				ondragover={(e) => e.preventDefault()}
-			>
-				{#if imagePreview}
-					<img src={imagePreview} alt="preview" class="max-h-24 object-contain" />
-				{:else}
-					Bild hier ablegen
-				{/if}
+			<div class="flex flex-col gap-1">
+				<textarea
+					id="description"
+					bind:value={newProduct['description']}
+					class="w-72 rounded border-2 border-gray-900 px-4 py-2 outline-none"
+					autocomplete="off"
+						rows="10"
+					placeholder="HTML supported: <b>bold</b>, <ul><li>item</li></ul>"
+				></textarea>
+				<span class="text-xs text-gray-400">HTML: &lt;b&gt;, &lt;ul&gt;&lt;li&gt;, &lt;br&gt; …</span>
 			</div>
 		</div>
 
-		<!-- Description in a larger textarea -->
-		<div class="gap- flex items-start gap-1">
-			<label
-				for="name"
-				class="inline-block w-48 rounded bg-slate-600 px-4 py-2 text-right text-white"
-				>description
-			</label>
-			<textarea
-				bind:value={newProduct['description']}
-				class="w-72 rounded border-2 border-gray-900 px-4 py-2 outline-none"
-				autocomplete="off"
-				type="text"
-				id="name"
-				name="name"
-				required
-				maxlength="250"
-				rows="10"
-				></textarea>
-		</div>
-
-		<!-- buttons -->
+		<!-- Buttons -->
 		<div class="mb-8 flex gap-4">
 			<button
 				class="rounded bg-slate-400 px-4 py-2 text-white transition hover:bg-gray-900 hover:bg-slate-400"
-				onclick={() => {
-					toast.error('canceled');
-				}}>cancel</button
-			>
+				onclick={() => toast.error('canceled')}
+			>cancel</button>
 			<button
-				class="ml-auto justify-end gap-4 rounded bg-gray-800 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
+				class="ml-auto rounded bg-gray-800 px-4 py-2 text-white transition hover:bg-yellow-400 hover:text-gray-900"
 				onclick={async () => {
 					const response = await fetch('/api/products', {
 						method: 'POST',
@@ -130,8 +131,8 @@
 					});
 					if (response.ok) { toast.success('Product added!'); invalidateProducts(); }
 					else toast.error('Error!');
-				}}>add</button
-			>
+				}}
+			>add</button>
 		</div>
 	</div>
 </div>

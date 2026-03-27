@@ -58,8 +58,12 @@ def save_data():
         data = []
         for p in products:
             d = ProductSchema.model_validate(p).model_dump(exclude={'id'})
-            image = d.pop('image', None)
-            d['image'] = image  # move image field to end
+            image  = d.pop('image',  None)
+            image2 = d.pop('image2', None)
+            image3 = d.pop('image3', None)
+            d['image']  = image   # move image fields to end for readability
+            d['image2'] = image2
+            d['image3'] = image3
             data.append(d)
     with open("./static/product.json", "w", encoding="utf-8") as f:
         json.dump({"product": data}, f, ensure_ascii=False, indent=2)

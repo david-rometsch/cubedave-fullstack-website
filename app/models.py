@@ -2,9 +2,10 @@
 models.py — SQLAlchemy ORM models and Pydantic validation schemas.
 """
 
+from datetime import datetime, timezone
+
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Text
-from datetime import datetime, timezone
 from sqlalchemy.orm import DeclarativeBase, relationship
 
 
@@ -13,6 +14,7 @@ class Base(DeclarativeBase):
 
 
 # ==== ORM models ====
+
 
 class Product(Base):
     __tablename__ = "products"
@@ -23,10 +25,14 @@ class Product(Base):
     info = Column(String, nullable=True)
     category = Column(String(100), nullable=False)
     price = Column(Float, nullable=True)
-    description = Column(String(100), nullable=True)
-    image = Column(Text, nullable=True)  # stored as base64 data URL
+    description = Column(String(500), nullable=True)
+    image = Column(Text, nullable=True)  # main image, stored as base64 data URL
+    image2 = Column(Text, nullable=True)  # secondary image
+    image3 = Column(Text, nullable=True)  # tertiary image
 
-    order_associations = relationship("ProductOrder", back_populates="product", cascade="all, delete-orphan")
+    order_associations = relationship(
+        "ProductOrder", back_populates="product", cascade="all, delete-orphan"
+    )
 
 
 class Order(Base):
@@ -39,6 +45,7 @@ class Order(Base):
 
 class ProductOrder(Base):
     """Association table between Order and Product, carrying the ordered quantity."""
+
     __tablename__ = "product_orders"
 
     product_id = Column(Integer, ForeignKey("products.id"), primary_key=True)
@@ -51,8 +58,10 @@ class ProductOrder(Base):
 
 # ==== Pydantic schemas ====
 
+
 class ProductCreateSchema(BaseModel):
     """Validates incoming product data for creation (no id required)."""
+
     name: str
     size: str
     brand: str
@@ -61,10 +70,13 @@ class ProductCreateSchema(BaseModel):
     price: float | None = None
     description: str | None = None
     image: str | None = None
+    image2: str | None = None
+    image3: str | None = None
 
 
 class ProductSchema(ProductCreateSchema):
     """Extends ProductCreateSchema with id — used for responses and updates."""
+
     id: int
     model_config = ConfigDict(from_attributes=True)
 
@@ -86,6 +98,7 @@ class OrderSchema(BaseModel):
 
 class Visit(Base):
     """Records each shop visit with a timestamp."""
+
     __tablename__ = "visits"
     id = Column(Integer, primary_key=True)
     visited_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
@@ -93,11 +106,13 @@ class Visit(Base):
 
 class OrderItemSchema(BaseModel):
     """A single line item in an order request."""
+
     product_id: int
     quantity: int
 
 
 class OrderRequest(BaseModel):
     """Validates the order payload sent from the cart."""
+
     customer_name: str
     items: list[OrderItemSchema]

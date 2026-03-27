@@ -1,0 +1,13 @@
+<svg width="680" height="88" viewBox="0 0 680 88" xmlns="http://www.w3.org/2000/svg">
+  <polygon fill="#90a1b9" stroke="#90a1b9" stroke-width="1" points="40,22 175,22 193,44 175,66 40,66"/>
+  <text font-size="13" font-family="sans-serif" fill="#ffffff" font-weight="500" x="112" y="44" text-anchor="middle" dominant-baseline="central">Shop</text>
+
+  <polygon fill="#111928" stroke="#111928" stroke-width="1" points="197,22 332,22 350,44 332,66 197,66 215,44"/>
+  <text font-size="13" font-family="sans-serif" fill="#ffffff" font-weight="500" x="275" y="44" text-anchor="middle" dominant-baseline="central">Cart</text>
+
+  <polygon fill="#f0f2f5" stroke="#c8d0db" stroke-width="1" points="354,22 489,22 507,44 489,66 354,66 372,44"/>
+  <text font-size="13" font-family="sans-serif" fill="#c8d0db" font-weight="400" x="432" y="44" text-anchor="middle" dominant-baseline="central">Checkout</text>
+
+  <polygon fill="#f0f2f5" stroke="#c8d0db" stroke-width="1" points="511,22 636,22 636,66 511,66 529,44"/>
+  <text font-size="13" font-family="sans-serif" fill="#c8d0db" font-weight="400" x="577" y="44" text-anchor="middle" dominant-baseline="central">Confirmation</text>
+</svg>

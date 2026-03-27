@@ -8,7 +8,9 @@ const config = {
 			fallback: 'index.html'
 		})
 	},
-	preprocess: [mdsvex()],
+	preprocess: [
+		// vitePreprocess(), 
+		mdsvex()],
 	extensions: ['.svelte', '.svx']
 };
 

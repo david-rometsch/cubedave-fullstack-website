@@ -19,7 +19,8 @@
 <nav class="bg-gray-300 px-6 py-3">
 	<ul class="flex items-center gap-6">
 		<li>
-			<a href="/" class="rounded bg-gray-900 px-4 py-2 text-white hover:text-yellow-400">Shop</a>
+			<a href="/shop" class="rounded bg-gray-900 px-4 py-2 text-white hover:text-yellow-400">Shop</a
+			>
 		</li>
 		<li class="ml-auto cursor-pointer text-gray-800 hover:text-yellow-400">
 			<a href="/orders/">Orders</a>
@@ -66,6 +67,6 @@
 				Restore Demo Data
 			</button>
 		</li>
-		<li class="ml-auto text-gray-600 text-sm">Visits: {visitCount}</li>
+		<li class="ml-auto text-sm text-gray-600">Visits: {visitCount}</li>
 	</ul>
 </div>
