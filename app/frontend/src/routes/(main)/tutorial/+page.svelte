@@ -5,6 +5,13 @@
 	let open = $state({});
 	const toggle = (i) => (open[i] = !open[i]);
 
+	let videoReady = $state(false);
+	let videoEl = $state(null);
+
+	function onCanPlayThrough() {
+		videoReady = true;
+	}
+
 	// Use 'arrow' as a placeholder — the template renders it as an inline SVG
 	const sections = [
 		{
@@ -25,7 +32,7 @@
 			title: 'Fingertricks',
 			headerImages: [],
 			content: `<p>Here again the basic motion. Watch precisley how to use your fingers.<br>Do it 6 times and the cube is solved again!<br>Can you do it in under 3 seconds? It's possible!<br><a href="product/10">Get the official Speedcubing Timer here.</a></p>`,
-			aside: `<video src="/images/grundbewegung.mp4" controls class="w-full rounded"></video>`
+			video: '/images/grundbewegung-mute.mp4'
 		},
 		{
 			title: 'Step 1 — Fake Cross',
@@ -97,7 +104,24 @@
 					</div>
 
 					<!-- Right: free aside slot — mp4, img, iframe, animation, anything -->
-					{#if section.aside}
+					{#if section.video}
+						<div class="relative w-80 shrink-0">
+							{#if !videoReady}
+								<div class="absolute inset-0 flex items-center justify-center bg-black/10 rounded">
+									<div class="h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600"></div>
+								</div>
+							{/if}
+							<video
+								bind:this={videoEl}
+								src={section.video}
+								controls
+								preload="auto"
+								class="w-full rounded"
+								style={videoReady ? '' : 'visibility: hidden;'}
+								oncanplaythrough={onCanPlayThrough}
+							></video>
+						</div>
+					{:else if section.aside}
 						<div class="w-80 shrink-0">
 							{@html section.aside}
 						</div>
