@@ -3,9 +3,12 @@
 	import Stepper from '$lib/Stepper.svelte';
 	import { goto } from '$app/navigation';
 
-	const total = $derived(
+	const SHIPPING = 6;
+
+	const subtotal = $derived(
 		cart.reduce((sum, item) => sum + (item.product.price ?? 0) * item.quantity, 0)
 	);
+	const total = $derived(subtotal + SHIPPING);
 </script>
 
 <div class="mx-auto max-w-5xl px-6 py-8">
@@ -72,6 +75,14 @@
 				{/each}
 			</tbody>
 			<tfoot>
+				<tr class="text-gray-500">
+					<td colspan="5" class="px-4 py-2 text-right">Subtotal</td>
+					<td class="px-4 py-2">sFr. {subtotal.toFixed(2)}</td>
+				</tr>
+				<tr class="text-gray-500">
+					<td colspan="5" class="px-4 py-2 text-right">Shipping</td>
+					<td class="px-4 py-2">sFr. {SHIPPING.toFixed(2)}</td>
+				</tr>
 				<tr class="font-bold">
 					<td colspan="5" class="px-4 py-2 text-right">Total</td>
 					<td class="px-4 py-2">sFr. {total.toFixed(2)}</td>

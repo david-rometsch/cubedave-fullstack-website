@@ -6,14 +6,6 @@
 
 	let quantities = $state({}); // per-product selected quantity
 
-	let videoReady = $state(false);
-	let videoEl;
-
-	function onCanPlayThrough() {
-		videoReady = true;
-		videoEl.play();
-	}
-
 	// Categories not explicitly listed fall under 'others'
 	const known = ['3x3', '4x4', '2x2'];
 
@@ -43,23 +35,13 @@
 	</p>
 
 	<!-- <video src="images/solve-mute.mp4" muted autoplay loop playsinline></video> -->
-	<div class="relative w-full overflow-hidden" style="height: 70vh;">
-		{#if !videoReady}
-			<div class="absolute inset-0 flex items-center justify-center bg-black/10">
-				<div class="h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600"></div>
-			</div>
-		{/if}
-		<video
-			bind:this={videoEl}
-			src="images/solve-mute.mp4"
-			muted
-			controls
-			playsinline
-			preload="auto"
-			class="w-full"
-			style="height: 140%; {videoReady ? '' : 'visibility: hidden;'}"
-			oncanplaythrough={onCanPlayThrough}
-		></video>
-	</div>
+	<video
+		src="images/solve-mute.mp4"
+		muted
+		controls
+		playsinline
+		preload="metadata"
+		class="w-full"
+	></video>
 		<a href="/product/2" class="block text-right text-blue-600 hover:text-blue-800">Get this cube at the shop!</a>
 </div>

@@ -5,9 +5,12 @@
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 
-	const total = $derived(
+	const SHIPPING = 6;
+
+	const subtotal = $derived(
 		cart.reduce((sum, i) => sum + (i.product.price ?? 0) * i.quantity, 0)
 	);
+	const total = $derived(subtotal + SHIPPING);
 
 	const paymentLabels = { card: 'Credit Card', twint: 'TWINT', invoice: 'Invoice' };
 
@@ -195,9 +198,15 @@
 						</div>
 					</div>
 				{/each}
-				<div
-					class="mt-2 flex justify-between border-t border-gray-200 pt-4 font-semibold text-gray-800"
-				>
+				<div class="mt-2 flex justify-between border-t border-gray-200 pt-3 text-sm text-gray-500">
+					<span>Subtotal</span>
+					<span>sFr. {subtotal.toFixed(2)}</span>
+				</div>
+				<div class="mt-1 flex justify-between text-sm text-gray-500">
+					<span>Shipping</span>
+					<span>sFr. {SHIPPING.toFixed(2)}</span>
+				</div>
+				<div class="mt-2 flex justify-between border-t border-gray-200 pt-3 font-semibold text-gray-800">
 					<span>Total</span>
 					<span>sFr. {total.toFixed(2)}</span>
 				</div>

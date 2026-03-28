@@ -2,6 +2,7 @@
 	import { checkout } from '$lib/checkout.svelte.js';
 	import Stepper from '$lib/Stepper.svelte';
 
+	const SHIPPING = 6;
 	const paymentLabels = { card: 'Credit Card', twint: 'TWINT', invoice: 'Invoice' };
 	const order = checkout.confirmedOrder;
 </script>
@@ -54,7 +55,15 @@
 						</div>
 					</div>
 				{/each}
-				<div class="mt-2 flex justify-between border-t border-gray-200 pt-4 font-semibold text-gray-800">
+				<div class="mt-2 flex justify-between border-t border-gray-200 pt-3 text-sm text-gray-500">
+					<span>Subtotal</span>
+					<span>sFr. {(order.total - SHIPPING).toFixed(2)}</span>
+				</div>
+				<div class="mt-1 flex justify-between text-sm text-gray-500">
+					<span>Shipping</span>
+					<span>sFr. {SHIPPING.toFixed(2)}</span>
+				</div>
+				<div class="mt-2 flex justify-between border-t border-gray-200 pt-3 font-semibold text-gray-800">
 					<span>Total</span>
 					<span>sFr. {order.total.toFixed(2)}</span>
 				</div>
