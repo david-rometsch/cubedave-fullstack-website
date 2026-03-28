@@ -31,17 +31,15 @@
 		>
 		and finally visit the <a href="shop" class="text-blue-600 hover:text-blue-800">shop</a>!
 
-		<a href="/" class="block text-right text-blue-600 hover:text-blue-800">read more -></a>
+		<a href="/cube-knowledge" class="block text-right text-blue-600 hover:text-blue-800"
+			>read more -></a
+		>
 	</p>
 
 	<!-- <video src="images/solve-mute.mp4" muted autoplay loop playsinline></video> -->
-	<video
-		src="images/solve-mute.mp4"
-		muted
-		controls
-		playsinline
-		preload="auto"
-		class="w-full"
+	<video src="images/solve-mute.mp4" muted controls playsinline preload="auto" class="w-full"
 	></video>
-		<a href="/product/2" class="block text-right text-blue-600 hover:text-blue-800">Get this cube at the shop!</a>
+	<a href="/product/2" class="block text-right text-blue-600 hover:text-blue-800"
+		>Get this cube at the shop!</a
+	>
 </div>
