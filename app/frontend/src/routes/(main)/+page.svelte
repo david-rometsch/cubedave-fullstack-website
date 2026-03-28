@@ -40,7 +40,7 @@
 		muted
 		controls
 		playsinline
-		preload="metadata"
+		preload="auto"
 		class="w-full"
 	></video>
 		<a href="/product/2" class="block text-right text-blue-600 hover:text-blue-800">Get this cube at the shop!</a>
