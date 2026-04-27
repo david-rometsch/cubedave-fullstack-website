@@ -25,21 +25,23 @@
 	<ul class="flex items-center gap-6">
 		<li class="mr-auto">
 			<a href="/">
-				<img
-					class="h-10 w-10 rounded-full object-cover"
-					alt="cubes-logo"
-					src="/images/cube.jpg"
-				/>
+				<img class="h-10 w-10 rounded-full object-cover" alt="cubes-logo" src="/images/cube.jpg" />
 			</a>
 		</li>
 		<li class="text-yellow-400"><a href="/tutorial">Tutorial</a></li>
 		<li class="text-yellow-400"><a href="/cube-knowledge">Cube Knowledge</a></li>
 		<li class="text-yellow-400"><a href="/product/shop">Shop</a></li>
+		<li class="text-yellow-400"><a href="/cstimer/index.html">Timer</a></li>
 		<li class="relative ml-auto">
-			<a href="/shopping-cart" class="flex items-center rounded bg-yellow-400 p-2 transition hover:bg-yellow-300">
+			<a
+				href="/shopping-cart"
+				class="flex items-center rounded bg-yellow-400 p-2 transition hover:bg-yellow-300"
+			>
 				<img src="/images/cart.png" alt="Cart" class="h-6 w-6" />
 			</a>
-			<span class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 text-xs font-bold text-yellow-400">
+			<span
+				class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 text-xs font-bold text-yellow-400"
+			>
 				{cart.length}
 			</span>
 		</li>
