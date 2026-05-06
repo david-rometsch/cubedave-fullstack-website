@@ -1,8 +1,13 @@
-{
-  auto_https disable_redirects
-}
+:443 {
 
-https://192.168.178.140:8445 {
-  tls 192.168.178.140.pem 192.168.178.140-key.pem
-  reverse_proxy localhost:8080
+    root * /home/david/develop/cstimer_fork/dist
+
+    # 🔥 WICHTIG: explizit PHP matchen
+    php_fastcgi unix//run/php-fpm/php-fpm.sock {
+        try_files {path} {path}/index.php {path}/index.html =404
+    }
+
+    file_server
+
+    tls /home/david/.local/share/caddy/192.168.178.140.pem /home/david/.local/share/caddy/192.168.178.140-key.pem
 }
