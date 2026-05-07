@@ -1,5 +1,5 @@
 <?php
-$version = "11e1eea";
+$version = "44746e9";
 
 function prefered_language($available_languages, $req_lang) {
   if ($req_lang == "auto" && isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
