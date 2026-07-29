@@ -2,7 +2,7 @@
 FROM node:22 AS builder
 WORKDIR /app
 COPY . .
-RUN npm install && npm run build 
+RUN npm install && NODE_OPTIONS="--max-old-space-size=350" npm run build 
 
 # Stage 2: copy
 FROM jonasal/nginx-certbot:latest
