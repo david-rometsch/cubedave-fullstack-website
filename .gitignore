@@ -1,17 +1,29 @@
+# Python
 .venv/
-.envrc
-.claude
 __pycache__/
 instance/
+
+# Node
+node_modules/
+
+# Build output
+.svelte-kit/
+build/
+dist/
+
+# Runtime data / local DB
+*.db
+*.sync-conflict-*.db
+
+# Editor/backup artifacts
+*.bak
+*~
+
+# Env / local config
+.envrc
+.claude
+
+# Misc
 archive/
 docs/
 test/
-archive/
-svelte-tryout/filter-list-ex/
-svelte-tryout/svelte-examples/
-svelte-tryout/svelte-tut.md
-ui-ux/
-
-
-
-	
